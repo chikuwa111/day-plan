@@ -4,5 +4,8 @@ import { render } from 'react-dom'
 import registerServiceWorker from './lib/registerServiceWorker'
 import App from './components/App'
 
-render(<App />, document.getElementById('root'))
-registerServiceWorker()
+const root = document.getElementById('root')
+if (root instanceof Element) {
+  render(<App />, root)
+  registerServiceWorker()
+}
