@@ -1,7 +1,9 @@
 // @flow
 import * as React from 'react'
 import pure from 'recompose/pure'
+import styled from 'styled-components'
 import type { Task } from '../types'
+import Timeline from '../components/Timeline'
 import TaskComp from '../components/shared/Task'
 
 export default pure(function App() {
@@ -13,6 +15,21 @@ export default pure(function App() {
   ]
 
   return (
-    <div>{taskList.map(task => <TaskComp key={task.body} task={task} />)}</div>
+    <div>
+      <TimelineDiv>
+        <Timeline begin={10} end={19} />
+      </TimelineDiv>
+      <TaskList>
+        {taskList.map(task => <TaskComp key={task.body} task={task} />)}
+      </TaskList>
+    </div>
   )
 })
+
+const TimelineDiv = styled.div`
+  float: left;
+`
+
+const TaskList = styled.div`
+  padding-top: 0.8rem;
+`
