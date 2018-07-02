@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+// @flow
+import * as React from 'react'
+import { render } from 'react-dom'
+import registerServiceWorker from './lib/registerServiceWorker'
+import App from './components/App'
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+render(<App />, document.getElementById('root'))
+registerServiceWorker()
