@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react'
 import pure from 'recompose/pure'
-import styled, { type ReactComponentStyled } from 'styled-components'
-import Paper from '@material-ui/core/Paper'
+import styled from 'styled-components'
+import Card from '@material-ui/core/Card'
 import type { Task } from '../../types'
 
 type Props = {|
@@ -19,7 +19,7 @@ export default pure(function Task(props: Props) {
   )
 })
 
-const Container = styled(Paper)`
+const Container = styled(Card)`
   && {
     max-width: 90%;
     display: flex;
