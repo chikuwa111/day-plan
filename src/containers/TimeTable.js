@@ -2,50 +2,98 @@
 import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import pure from 'recompose/pure'
 import styled from 'styled-components'
 import type { State, Task } from '../types'
-import { add } from '../actions/tasks'
+import { add, update, destroy } from '../actions/tasks'
 import Grid from '@material-ui/core/Grid'
 import Timeline from '../components/Timeline'
 import TaskComp from '../components/Task'
 import EmptyTask from '../components/EmptyTask'
+import EditingTask from '../components/EditingTask'
 
 type Props = {|
   begin: number,
   end: number,
   tasks: Array<?Task>,
   add: number => void,
+  update: (number, Task) => void,
+  destroy: number => void,
 |}
 
-function TimeTable(props: Props) {
-  const { begin, end, tasks, add } = props
+type TimeTableState = {|
+  editingIndex: ?number,
+|}
 
-  return (
-    <Container>
-      <GridWrapper container>
-        <Grid item xs={2} sm={1}>
-          <Timeline begin={begin} end={end} />
-        </Grid>
-        <Grid item xs={10} sm={11}>
-          <MarginDiv />
-          {tasks.map(
-            (task, index) =>
-              task == null ? (
-                <EmptyTask
-                  key={index}
-                  onClick={() => {
-                    add(index)
-                  }}
-                />
-              ) : (
-                <TaskComp key={task.id} task={task} />
-              )
-          )}
-        </Grid>
-      </GridWrapper>
-    </Container>
-  )
+class TimeTable extends React.PureComponent<Props, TimeTableState> {
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      editingIndex: null,
+    }
+  }
+
+  changeEditing = (editingIndex: ?number) => {
+    this.setState({ editingIndex })
+  }
+
+  render() {
+    const { begin, end, tasks, add, update, destroy } = this.props
+    const { editingIndex } = this.state
+
+    return (
+      <Container>
+        <GridWrapper container>
+          <Grid
+            item
+            xs={2}
+            sm={1}
+            onClick={() => {
+              this.changeEditing(null)
+            }}
+          >
+            <Timeline begin={begin} end={end} />
+          </Grid>
+          <Grid item xs={10} sm={11}>
+            <MarginDiv />
+            {tasks.map((task, index) => {
+              if (task == null)
+                return (
+                  <EmptyTask
+                    key={index}
+                    onClick={() => {
+                      add(index)
+                      this.changeEditing(index)
+                    }}
+                  />
+                )
+              else if (editingIndex !== index)
+                return (
+                  <TaskComp
+                    key={task.id}
+                    task={task}
+                    onClick={() => {
+                      this.changeEditing(index)
+                    }}
+                  />
+                )
+              else
+                return (
+                  <EditingTask
+                    task={task}
+                    onChange={(task: Task) => {
+                      update(index, task)
+                    }}
+                    onDestroy={() => {
+                      destroy(index)
+                    }}
+                  />
+                )
+            })}
+          </Grid>
+        </GridWrapper>
+      </Container>
+    )
+  }
 }
 
 const Container = styled.div`
@@ -71,10 +119,10 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ add }, dispatch),
+  ...bindActionCreators({ add, update, destroy }, dispatch),
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(pure(TimeTable))
+)(TimeTable)

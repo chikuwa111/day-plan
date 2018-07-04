@@ -15,7 +15,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 type Props = {|
   task: Task,
   onChange: Task => void,
-  onDelete: () => void,
+  onDestroy: () => void,
 |}
 
 type State = {|
@@ -47,11 +47,12 @@ export default class EditableTask extends React.PureComponent<Props, State> {
 
   render() {
     const { menuType, menuElement } = this.state
-    const { task, onChange, onDelete } = this.props
+    const { task, onChange, onDestroy } = this.props
 
     return (
       <Container task={task}>
         <BodyField
+          autoFocus
           value={task.body}
           onChange={e => {
             onChange({
@@ -117,7 +118,7 @@ export default class EditableTask extends React.PureComponent<Props, State> {
           ))}
         </Menu>
         <IconButton>
-          <DeleteIcon onClick={onDelete} />
+          <DeleteIcon onClick={onDestroy} />
         </IconButton>
       </Container>
     )

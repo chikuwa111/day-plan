@@ -7,13 +7,14 @@ import type { Task } from '../types'
 
 type Props = {|
   task: Task,
+  onClick: () => void,
 |}
 
 export default pure(function Task(props: Props) {
-  const { task } = props
+  const { task, onClick } = props
 
   return (
-    <Container task={task}>
+    <Container task={task} onClick={onClick}>
       <Body>{task.body}</Body>
     </Container>
   )
