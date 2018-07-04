@@ -3,7 +3,7 @@ import * as React from 'react'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
 import Card from '@material-ui/core/Card'
-import type { Task } from '../../types'
+import type { Task } from '../types'
 
 type Props = {|
   task: Task,

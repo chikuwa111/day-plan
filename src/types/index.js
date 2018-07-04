@@ -20,6 +20,7 @@ export type FormState = Task
 export type StockState = Array<Task>
 
 export type Task = {|
+  id: string,
   body: string,
   color: string,
   length: number,

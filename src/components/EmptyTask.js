@@ -3,9 +3,15 @@ import * as React from 'react'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
 
-export default pure(function EmptyTask() {
+type Props = {|
+  onClick: () => void,
+|}
+
+export default pure(function EmptyTask(props: Props) {
+  const { onClick } = props
+
   return (
-    <Container>
+    <Container onClick={onClick}>
       <Body>+</Body>
     </Container>
   )
@@ -24,6 +30,7 @@ const Container = styled.div`
   color: lightgray;
   display: flex;
   align-items: center;
+  cursor: pointer;
 `
 
 const Body = styled.div`

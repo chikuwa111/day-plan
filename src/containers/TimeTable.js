@@ -1,22 +1,25 @@
 // @flow
 import * as React from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
 import type { State, Task } from '../types'
+import { add } from '../actions/tasks'
 import Grid from '@material-ui/core/Grid'
 import Timeline from '../components/Timeline'
-import TaskComp from '../components/shared/Task'
+import TaskComp from '../components/Task'
 import EmptyTask from '../components/EmptyTask'
 
 type Props = {|
   begin: number,
   end: number,
   tasks: Array<?Task>,
+  add: number => void,
 |}
 
 function TimeTable(props: Props) {
-  const { begin, end, tasks } = props
+  const { begin, end, tasks, add } = props
 
   return (
     <Container>
@@ -27,11 +30,16 @@ function TimeTable(props: Props) {
         <Grid item xs={10} sm={11}>
           <MarginDiv />
           {tasks.map(
-            task =>
+            (task, index) =>
               task == null ? (
-                <EmptyTask />
+                <EmptyTask
+                  key={index}
+                  onClick={() => {
+                    add(index)
+                  }}
+                />
               ) : (
-                <TaskComp key={task.body} task={task} />
+                <TaskComp key={task.id} task={task} />
               )
           )}
         </Grid>
@@ -62,4 +70,11 @@ const mapStateToProps = (state: State) => ({
   tasks: state.tasks,
 })
 
-export default connect(mapStateToProps)(pure(TimeTable))
+const mapDispatchToProps = dispatch => ({
+  ...bindActionCreators({ add }, dispatch),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(pure(TimeTable))
