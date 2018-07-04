@@ -21,12 +21,12 @@ export default pure(function Task(props: Props) {
 
 const Container = styled(Card)`
   && {
-    max-width: 90%;
+    width: 100%;
+    height: ${props => props.task.length / 15}rem;
+    background-color: ${props => props.task.color};
+    font-size: ${props => 0.8 + props.task.length / 150}rem;
     display: flex;
     align-items: center;
-    background-color: ${props => props.task.color};
-    height: ${props => props.task.length / 15}rem;
-    font-size: ${props => 0.8 + props.task.length / 150}rem;
   }
 `
 
