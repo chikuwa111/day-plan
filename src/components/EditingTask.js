@@ -14,6 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 
 type Props = {|
   task: Task,
+  maxLength: ?number,
   onChange: Task => void,
   onDestroy: () => void,
 |}
@@ -47,7 +48,7 @@ export default class EditableTask extends React.PureComponent<Props, State> {
 
   render() {
     const { menuType, menuElement } = this.state
-    const { task, onChange, onDestroy } = this.props
+    const { task, maxLength, onChange, onDestroy } = this.props
 
     return (
       <Container task={task}>
@@ -73,21 +74,24 @@ export default class EditableTask extends React.PureComponent<Props, State> {
           anchorEl={menuElement}
           onClose={this.closeMenu}
         >
-          {TimeLengths.map(length => (
-            <MenuItem
-              key={length}
-              selected={task.length === length}
-              onClick={() => {
-                onChange({
-                  ...task,
-                  length,
-                })
-                this.closeMenu()
-              }}
-            >
-              {length}
-            </MenuItem>
-          ))}
+          {TimeLengths.map(
+            length =>
+              (maxLength == null || length <= maxLength) && (
+                <MenuItem
+                  key={length}
+                  selected={task.length === length}
+                  onClick={() => {
+                    onChange({
+                      ...task,
+                      length,
+                    })
+                    this.closeMenu()
+                  }}
+                >
+                  {length}
+                </MenuItem>
+              )
+          )}
         </Menu>
         <IconButton
           onClick={e => {

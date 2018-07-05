@@ -55,8 +55,8 @@ class TimeTable extends React.PureComponent<Props, TimeTableState> {
           </Grid>
           <Grid item xs={10} sm={11}>
             <MarginDiv />
-            {tasks.map((task, index) => {
-              if (task == null)
+            {tasks.map((task, index, tasks) => {
+              if (task == null) {
                 return (
                   <EmptyTask
                     key={index}
@@ -66,7 +66,7 @@ class TimeTable extends React.PureComponent<Props, TimeTableState> {
                     }}
                   />
                 )
-              else if (editingIndex !== index)
+              } else if (editingIndex !== index) {
                 return (
                   <TaskComp
                     key={task.id}
@@ -76,10 +76,20 @@ class TimeTable extends React.PureComponent<Props, TimeTableState> {
                     }}
                   />
                 )
-              else
+              } else {
+                let maxLength = task.length
+                tasks.slice(index + 1).every(behindTask => {
+                  if (behindTask == null) {
+                    maxLength += 30
+                    return true
+                  }
+                  return false
+                })
                 return (
                   <EditingTask
+                    key={task.id}
                     task={task}
+                    maxLength={maxLength}
                     onChange={(task: Task) => {
                       update(index, task)
                     }}
@@ -88,6 +98,7 @@ class TimeTable extends React.PureComponent<Props, TimeTableState> {
                     }}
                   />
                 )
+              }
             })}
           </Grid>
         </GridWrapper>

@@ -59,6 +59,7 @@ class Stock extends React.PureComponent<Props, StockState> {
               ) : (
                 <EditingTask
                   task={task}
+                  maxLength={null}
                   onChange={(t: Task) => {
                     update(index, t)
                   }}

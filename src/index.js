@@ -8,6 +8,7 @@ import storage from 'redux-persist/lib/storage'
 import { PersistGate } from 'redux-persist/integration/react'
 import reducer from './reducers'
 import registerServiceWorker from './lib/registerServiceWorker'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import App from './components/App'
 
 const root = document.getElementById('root')
@@ -21,7 +22,7 @@ if (root instanceof Element) {
   const persistor = persistStore(store)
   render(
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={<CircularProgress />} persistor={persistor}>
         <App />
       </PersistGate>
     </Provider>,
