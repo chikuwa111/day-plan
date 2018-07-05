@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import IconButton from '@material-ui/core/IconButton'
-import TimerIcon from '@material-ui/icons/Timer'
+import ScheduleIcon from '@material-ui/icons/Schedule'
 import ColorLensIcon from '@material-ui/icons/ColorLens'
 import DeleteIcon from '@material-ui/icons/Delete'
 
@@ -67,7 +67,7 @@ export default class EditableTask extends React.PureComponent<Props, State> {
             this.openMenu(e.currentTarget, 'length')
           }}
         >
-          <TimerIcon />
+          <ScheduleIcon />
         </IconButton>
         <Menu
           open={menuType === 'length'}
