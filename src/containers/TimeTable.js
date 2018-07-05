@@ -3,8 +3,9 @@ import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import type { State, Task } from '../types'
+import type { State, Task, EditingPlace } from '../types'
 import { add, update, destroy } from '../actions/tasks'
+import { change } from '../actions/session'
 import Grid from '@material-ui/core/Grid'
 import Timeline from '../components/Timeline'
 import TaskComp from '../components/Task'
@@ -15,30 +16,25 @@ type Props = {|
   begin: number,
   end: number,
   tasks: Array<?Task>,
+  editingIndex: ?number,
   add: number => void,
   update: (number, Task) => void,
   destroy: number => void,
+  changeEditing: (EditingPlace, number) => void,
 |}
 
-type TimeTableState = {|
-  editingIndex: ?number,
-|}
-
-class TimeTable extends React.PureComponent<Props, TimeTableState> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      editingIndex: null,
-    }
-  }
-
-  changeEditing = (editingIndex: ?number) => {
-    this.setState({ editingIndex })
-  }
-
+class TimeTable extends React.PureComponent<Props> {
   render() {
-    const { begin, end, tasks, add, update, destroy } = this.props
-    const { editingIndex } = this.state
+    const {
+      begin,
+      end,
+      tasks,
+      add,
+      update,
+      destroy,
+      editingIndex,
+      changeEditing,
+    } = this.props
 
     return (
       <Container>
@@ -48,7 +44,7 @@ class TimeTable extends React.PureComponent<Props, TimeTableState> {
             xs={2}
             sm={1}
             onClick={() => {
-              this.changeEditing(null)
+              changeEditing(null, 999)
             }}
           >
             <Timeline begin={begin} end={end} />
@@ -62,7 +58,7 @@ class TimeTable extends React.PureComponent<Props, TimeTableState> {
                     key={index}
                     onClick={() => {
                       add(index)
-                      this.changeEditing(index)
+                      changeEditing('TimeTable', index)
                     }}
                   />
                 )
@@ -72,7 +68,7 @@ class TimeTable extends React.PureComponent<Props, TimeTableState> {
                     key={task.id}
                     task={task}
                     onClick={() => {
-                      this.changeEditing(index)
+                      changeEditing('TimeTable', index)
                     }}
                   />
                 )
@@ -127,10 +123,17 @@ const mapStateToProps = (state: State) => ({
   begin: state.setting.begin,
   end: state.setting.end,
   tasks: state.tasks,
+  editingIndex:
+    state.session.editingPlace === 'TimeTable'
+      ? state.session.editingIndex
+      : null,
 })
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators({ add, update, destroy }, dispatch),
+  changeEditing: (editingPlace: EditingPlace, editingIndex: number) => {
+    dispatch(change(editingPlace, editingIndex))
+  },
 })
 
 export default connect(

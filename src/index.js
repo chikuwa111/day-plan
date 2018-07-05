@@ -16,6 +16,7 @@ if (root instanceof Element) {
   const persistConfig = {
     key: 'root',
     storage,
+    blacklist: ['session'],
   }
   const persistedReducer = persistReducer(persistConfig, reducer)
   const store = createStore(persistedReducer)

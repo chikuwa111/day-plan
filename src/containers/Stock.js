@@ -3,8 +3,9 @@ import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import type { State, Task } from '../types'
+import type { State, Task, EditingPlace } from '../types'
 import { add, update, destroy } from '../actions/stock'
+import { change } from '../actions/session'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import TaskComp from '../components/Task'
@@ -13,30 +14,23 @@ import EditingTask from '../components/EditingTask'
 
 type Props = {|
   tasks: Array<Task>,
+  editingIndex: ?number,
   add: () => void,
   update: (number, Task) => void,
   destroy: number => void,
+  changeEditing: (EditingPlace, number) => void,
 |}
 
-type StockState = {|
-  editingIndex: ?number,
-|}
-
-class Stock extends React.PureComponent<Props, StockState> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      editingIndex: null,
-    }
-  }
-
-  changeEditing = (editingIndex: ?number) => {
-    this.setState({ editingIndex })
-  }
-
+class Stock extends React.PureComponent<Props> {
   render() {
-    const { tasks, add, update, destroy } = this.props
-    const { editingIndex } = this.state
+    const {
+      tasks,
+      editingIndex,
+      add,
+      update,
+      destroy,
+      changeEditing,
+    } = this.props
 
     return (
       <ContainerPaper>
@@ -44,7 +38,7 @@ class Stock extends React.PureComponent<Props, StockState> {
           <EmptyTask
             onClick={() => {
               add()
-              this.changeEditing(0)
+              changeEditing('Stock', 0)
             }}
           />
           {tasks.map((task, index) => (
@@ -53,7 +47,7 @@ class Stock extends React.PureComponent<Props, StockState> {
                 <TaskComp
                   task={task}
                   onClick={() => {
-                    this.changeEditing(index)
+                    changeEditing('Stock', index)
                   }}
                 />
               ) : (
@@ -87,10 +81,15 @@ const ContainerPaper = styled(Paper)`
 
 const mapStateToProps = (state: State) => ({
   tasks: state.stock,
+  editingIndex:
+    state.session.editingPlace === 'Stock' ? state.session.editingIndex : null,
 })
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators({ add, update, destroy }, dispatch),
+  changeEditing: (editingPlace: EditingPlace, editingIndex: number) => {
+    dispatch(change(editingPlace, editingIndex))
+  },
 })
 
 export default connect(
