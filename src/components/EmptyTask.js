@@ -2,17 +2,25 @@
 import * as React from 'react'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
+import IconButton from '@material-ui/core/IconButton'
+import GetAppIcon from '@material-ui/icons/GetApp'
 
 type Props = {|
   onClick: () => void,
+  onMove: ?() => void,
 |}
 
 export default pure(function EmptyTask(props: Props) {
-  const { onClick } = props
+  const { onClick, onMove } = props
 
   return (
-    <Container onClick={onClick}>
-      <Body>+</Body>
+    <Container>
+      <Body onClick={onClick}>+</Body>
+      {onMove && (
+        <IconButton onClick={onMove}>
+          <GetApp />
+        </IconButton>
+      )}
     </Container>
   )
 })
@@ -37,4 +45,10 @@ const Body = styled.div`
   width: 100%;
   word-break: break-all;
   text-align: center;
+`
+
+const GetApp = styled(GetAppIcon)`
+  && {
+    color: lightgray;
+  }
 `

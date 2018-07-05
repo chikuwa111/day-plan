@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import type { State, Task, EditingPlace } from '../types'
 import { add, update, destroy } from '../actions/stock'
+import { move } from '../actions/tasks'
 import { change } from '../actions/session'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
@@ -14,10 +15,13 @@ import EditingTask from '../components/EditingTask'
 
 type Props = {|
   tasks: Array<Task>,
-  editingIndex: ?number,
+  editingTask: ?Task,
+  editingPlace: EditingPlace,
+  editingIndex: number,
   add: () => void,
   update: (number, Task) => void,
   destroy: number => void,
+  move: (Task, EditingPlace, number, EditingPlace, number) => void,
   changeEditing: (EditingPlace, number) => void,
 |}
 
@@ -25,10 +29,13 @@ class Stock extends React.PureComponent<Props> {
   render() {
     const {
       tasks,
+      editingTask,
+      editingPlace,
       editingIndex,
       add,
       update,
       destroy,
+      move,
       changeEditing,
     } = this.props
 
@@ -36,21 +43,18 @@ class Stock extends React.PureComponent<Props> {
       <ContainerPaper>
         <Grid container direction="column" spacing={8}>
           <EmptyTask
-            onClick={() => {
-              add()
-              changeEditing('Stock', 0)
-            }}
+            onClick={add}
+            onMove={
+              editingTask && editingPlace !== 'Stock'
+                ? () => {
+                    move(editingTask, editingPlace, editingIndex, 'Stock', 0)
+                  }
+                : null
+            }
           />
           {tasks.map((task, index) => (
             <Grid item key={task.id}>
-              {editingIndex !== index ? (
-                <TaskComp
-                  task={task}
-                  onClick={() => {
-                    changeEditing('Stock', index)
-                  }}
-                />
-              ) : (
+              {editingPlace === 'Stock' && editingIndex === index ? (
                 <EditingTask
                   task={task}
                   maxLength={null}
@@ -59,6 +63,13 @@ class Stock extends React.PureComponent<Props> {
                   }}
                   onDestroy={() => {
                     destroy(index)
+                  }}
+                />
+              ) : (
+                <TaskComp
+                  task={task}
+                  onClick={() => {
+                    changeEditing('Stock', index)
                   }}
                 />
               )}
@@ -81,12 +92,18 @@ const ContainerPaper = styled(Paper)`
 
 const mapStateToProps = (state: State) => ({
   tasks: state.stock,
-  editingIndex:
-    state.session.editingPlace === 'Stock' ? state.session.editingIndex : null,
+  editingTask:
+    state.session.editingPlace === 'TimeTable'
+      ? state.tasks[state.session.editingIndex]
+      : state.session.editingPlace === 'Stock'
+        ? state.stock[state.session.editingIndex]
+        : null,
+  editingPlace: state.session.editingPlace,
+  editingIndex: state.session.editingIndex,
 })
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ add, update, destroy }, dispatch),
+  ...bindActionCreators({ add, update, destroy, move }, dispatch),
   changeEditing: (editingPlace: EditingPlace, editingIndex: number) => {
     dispatch(change(editingPlace, editingIndex))
   },
