@@ -3,7 +3,6 @@
 export type State = {
   +tasks: TasksState,
   +setting: SettingState,
-  +form: FormState,
   +stock: StockState,
 }
 
@@ -14,8 +13,6 @@ export type SettingState = {|
   begin: number,
   end: number,
 |}
-
-export type FormState = Task
 
 export type StockState = Array<Task>
 
