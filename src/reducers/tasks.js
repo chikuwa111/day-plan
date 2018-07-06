@@ -55,7 +55,6 @@ const tasks = (
     case 'TASKS__MOVE': {
       const taskSize = action.task.length / 30
       if (action.from === TaskPlaces.TIMETABLE) {
-        // TODO: taskの移動前後が被っているときの処理
         if (action.fromIndex <= action.toIndex) {
           return [
             ...tasks.slice(0, action.fromIndex),
@@ -64,15 +63,23 @@ const tasks = (
             action.task,
             ...tasks.slice(action.toIndex + taskSize),
           ]
-        } else {
+        }
+        const moveSize = Math.abs(action.fromIndex - action.toIndex)
+        if (moveSize < taskSize) {
           return [
             ...tasks.slice(0, action.toIndex),
             action.task,
-            ...tasks.slice(action.toIndex + taskSize, action.fromIndex),
-            ...Array.from({ length: taskSize }, () => null),
+            ...Array.from({ length: moveSize }, () => null),
             ...tasks.slice(action.fromIndex + 1),
           ]
         }
+        return [
+          ...tasks.slice(0, action.toIndex),
+          action.task,
+          ...tasks.slice(action.toIndex + taskSize, action.fromIndex),
+          ...Array.from({ length: taskSize }, () => null),
+          ...tasks.slice(action.fromIndex + 1),
+        ]
       }
       return [
         ...tasks.slice(0, action.toIndex),
