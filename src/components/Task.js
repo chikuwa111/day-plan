@@ -12,6 +12,7 @@ type Props = {|
   index: number,
   onClick: () => void,
   connectDragSource: Function,
+  connectDragPreview: Function,
 |}
 
 const dragSource = {
@@ -26,16 +27,18 @@ const dragSource = {
 
 const collect = (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
 })
 
 export default DragSource('TASK', dragSource, collect)(
   pure(function Task(props: Props) {
-    const { task, onClick, connectDragSource } = props
+    const { task, onClick, connectDragSource, connectDragPreview } = props
 
-    return connectDragSource(
-      <div onClick={onClick}>
-        <Container task={task}>
+    return connectDragPreview(
+      <div>
+        <Container task={task} onClick={onClick}>
           <Body>{task.body}</Body>
+          <DragSourceDiv innerRef={instance => connectDragSource(instance)} />
         </Container>
       </div>
     )
@@ -50,6 +53,7 @@ const Container = styled(Card)`
     font-size: ${props => 0.8 + props.task.length / 150}rem;
     display: flex;
     align-items: center;
+    position: relative;
   }
 `
 
@@ -57,4 +61,11 @@ const Body = styled.div`
   width: 98%;
   margin-left: 2%;
   word-break: break-all;
+`
+
+const DragSourceDiv = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 2rem;
+  top: 0;
 `

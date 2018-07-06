@@ -28,12 +28,13 @@ export default DropTarget('TASK', dropTarget, collect)(
   pure(function EmptyTask(props: Props) {
     const { onClick, connectDropTarget } = props
 
-    return connectDropTarget(
-      <div onClick={onClick}>
-        <Container>
-          <Body>+</Body>
-        </Container>
-      </div>
+    return (
+      <Container
+        onClick={onClick}
+        innerRef={instance => connectDropTarget(instance)}
+      >
+        <Body>+</Body>
+      </Container>
     )
   })
 )
