@@ -9,14 +9,14 @@ type Props = {|
   place: TaskPlace,
   index: number,
   onClick: () => void,
-  onDrop: (Task, TaskPlace, number, TaskPlace, number) => void,
+  onDrop: (Task, TaskPlace, number, number) => void,
   connectDropTarget: Function,
 |}
 
 const dropTarget = {
   drop(props, monitor) {
     const { task, place, index } = monitor.getItem()
-    props.onDrop(task, place, index, props.place, props.index)
+    props.onDrop(task, place, index, props.index)
   },
 }
 

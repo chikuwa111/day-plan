@@ -21,7 +21,7 @@ type Props = {|
   add: number => void,
   update: (number, Task) => void,
   destroy: number => void,
-  move: (Task, TaskPlace, number, TaskPlace, number) => void,
+  move: (Task, TaskPlace, number, number) => void,
   changeEditing: (TaskPlace, number) => void,
 |}
 
@@ -138,8 +138,8 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators({ add, update, destroy, move }, dispatch),
-  changeEditing: (editingPlace: TaskPlace, editingIndex: number) => {
-    dispatch(change(editingPlace, editingIndex))
+  changeEditing: (place: TaskPlace, index: number) => {
+    dispatch(change(place, index))
   },
 })
 

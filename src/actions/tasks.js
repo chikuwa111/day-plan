@@ -9,7 +9,6 @@ type MoveAction = {
   task: Task,
   from: TaskPlace,
   fromIndex: number,
-  to: TaskPlace,
   toIndex: number,
 }
 
@@ -35,13 +34,11 @@ export const move = (
   task: Task,
   from: TaskPlace,
   fromIndex: number,
-  to: TaskPlace,
   toIndex: number
 ) => ({
   type: 'TASKS__MOVE',
   task,
   from,
   fromIndex,
-  to,
   toIndex,
 })

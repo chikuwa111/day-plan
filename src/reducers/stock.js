@@ -21,21 +21,23 @@ const stock = (
       ]
     case 'STOCK__DESTROY':
       return [...stock.slice(0, action.index), ...stock.slice(action.index + 1)]
+    case 'STOCK__MOVE':
+      if (action.from === TaskPlaces.STOCK) {
+        return [
+          action.task,
+          ...stock.slice(0, action.fromIndex),
+          ...stock.slice(action.fromIndex + 1),
+        ]
+      }
+      return [action.task, ...stock]
     case 'TASKS__MOVE':
       if (action.from === TaskPlaces.STOCK) {
         return [
           ...stock.slice(0, action.fromIndex),
           ...stock.slice(action.fromIndex + 1),
         ]
-      } else if (action.to === TaskPlaces.STOCK) {
-        return [
-          ...stock.slice(0, action.toIndex),
-          action.task,
-          ...stock.slice(action.toIndex),
-        ]
-      } else {
-        return stock
       }
+      return stock
     default:
       return stock
   }

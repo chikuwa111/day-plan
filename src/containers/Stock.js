@@ -5,8 +5,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
-import { add, update, destroy } from '../actions/stock'
-import { move } from '../actions/tasks'
+import { add, update, destroy, move } from '../actions/stock'
 import { change } from '../actions/session'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
@@ -20,7 +19,7 @@ type Props = {|
   add: () => void,
   update: (number, Task) => void,
   destroy: number => void,
-  move: (Task, TaskPlace, number, TaskPlace, number) => void,
+  move: (Task, TaskPlace, number, number) => void,
   changeEditing: (TaskPlace, number) => void,
 |}
 
@@ -95,8 +94,8 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators({ add, update, destroy, move }, dispatch),
-  changeEditing: (editingPlace: TaskPlace, editingIndex: number) => {
-    dispatch(change(editingPlace, editingIndex))
+  changeEditing: (place: TaskPlace, index: number) => {
+    dispatch(change(place, index))
   },
 })
 

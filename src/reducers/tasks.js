@@ -54,10 +54,7 @@ const tasks = (
     }
     case 'TASKS__MOVE': {
       const taskSize = action.task.length / 30
-      if (
-        action.from === TaskPlaces.TIMETABLE &&
-        action.to === TaskPlaces.TIMETABLE
-      ) {
+      if (action.from === TaskPlaces.TIMETABLE) {
         // TODO: taskの移動前後が被っているときの処理
         if (action.fromIndex <= action.toIndex) {
           return [
@@ -76,22 +73,22 @@ const tasks = (
             ...tasks.slice(action.fromIndex + 1),
           ]
         }
-      } else if (action.from === TaskPlaces.TIMETABLE) {
+      }
+      return [
+        ...tasks.slice(0, action.toIndex),
+        action.task,
+        ...tasks.slice(action.toIndex + taskSize),
+      ]
+    }
+    case 'STOCK__MOVE':
+      if (action.from === TaskPlaces.TIMETABLE) {
         return [
           ...tasks.slice(0, action.fromIndex),
-          ...Array.from({ length: taskSize }, () => null),
+          ...Array.from({ length: action.task.length / 30 }, () => null),
           ...tasks.slice(action.fromIndex + 1),
         ]
-      } else if (action.to === TaskPlaces.TIMETABLE) {
-        return [
-          ...tasks.slice(0, action.toIndex),
-          action.task,
-          ...tasks.slice(action.toIndex + taskSize),
-        ]
-      } else {
-        return tasks
       }
-    }
+      return tasks
     default:
       return tasks
   }
