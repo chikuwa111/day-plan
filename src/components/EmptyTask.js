@@ -2,28 +2,41 @@
 import * as React from 'react'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
-import GetAppIcon from '@material-ui/icons/GetApp'
+import { DropTarget } from 'react-dnd'
+import type { Task, EditingPlace } from '../types'
 
 type Props = {|
+  place: EditingPlace,
+  index: number,
   onClick: () => void,
-  onMove: ?() => void,
+  onDrop: (Task, EditingPlace, number, EditingPlace, number) => void,
+  connectDropTarget: Function,
 |}
 
-export default pure(function EmptyTask(props: Props) {
-  const { onClick, onMove } = props
+const dropTarget = {
+  drop(props, monitor) {
+    const { task, place, index } = monitor.getItem()
+    props.onDrop(task, place, index, props.place, props.index)
+  },
+}
 
-  return (
-    <Container>
-      <Body onClick={onClick}>+</Body>
-      {onMove && (
-        <IconButton onClick={onMove}>
-          <GetApp />
-        </IconButton>
-      )}
-    </Container>
-  )
+const collect = (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
 })
+
+export default DropTarget('TASK', dropTarget, collect)(
+  pure(function EmptyTask(props: Props) {
+    const { onClick, connectDropTarget } = props
+
+    return connectDropTarget(
+      <div onClick={onClick}>
+        <Container>
+          <Body>+</Body>
+        </Container>
+      </div>
+    )
+  })
+)
 
 const Container = styled.div`
   width: 99%;
@@ -45,10 +58,4 @@ const Body = styled.div`
   width: 100%;
   word-break: break-all;
   text-align: center;
-`
-
-const GetApp = styled(GetAppIcon)`
-  && {
-    color: lightgray;
-  }
 `

@@ -2,23 +2,45 @@
 import * as React from 'react'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
+import { DragSource } from 'react-dnd'
+import type { Task, EditingPlace } from '../types'
 import Card from '@material-ui/core/Card'
-import type { Task } from '../types'
 
 type Props = {|
   task: Task,
+  place: EditingPlace,
+  index: number,
   onClick: () => void,
+  connectDragSource: Function,
 |}
 
-export default pure(function Task(props: Props) {
-  const { task, onClick } = props
+const dragSource = {
+  beginDrag(props) {
+    return {
+      task: props.task,
+      place: props.place,
+      index: props.index,
+    }
+  },
+}
 
-  return (
-    <Container task={task} onClick={onClick}>
-      <Body>{task.body}</Body>
-    </Container>
-  )
+const collect = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
 })
+
+export default DragSource('TASK', dragSource, collect)(
+  pure(function Task(props: Props) {
+    const { task, onClick, connectDragSource } = props
+
+    return connectDragSource(
+      <div onClick={onClick}>
+        <Container task={task}>
+          <Body>{task.body}</Body>
+        </Container>
+      </div>
+    )
+  })
+)
 
 const Container = styled(Card)`
   && {

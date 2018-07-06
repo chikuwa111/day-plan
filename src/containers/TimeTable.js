@@ -16,8 +16,6 @@ type Props = {|
   begin: number,
   end: number,
   tasks: Array<?Task>,
-  editingTask: ?Task,
-  editingPlace: EditingPlace,
   editingIndex: number,
   add: number => void,
   update: (number, Task) => void,
@@ -32,8 +30,6 @@ class TimeTable extends React.PureComponent<Props> {
       begin,
       end,
       tasks,
-      editingTask,
-      editingPlace,
       editingIndex,
       add,
       update,
@@ -62,27 +58,15 @@ class TimeTable extends React.PureComponent<Props> {
                 return (
                   <EmptyTask
                     key={index}
+                    place={'TimeTable'}
+                    index={index}
                     onClick={() => {
                       add(index)
                     }}
-                    onMove={
-                      editingTask &&
-                      (() => {
-                        move(
-                          editingTask,
-                          editingPlace,
-                          editingIndex,
-                          'TimeTable',
-                          index
-                        )
-                      })
-                    }
+                    onDrop={move}
                   />
                 )
-              } else if (
-                editingPlace === 'TimeTable' &&
-                editingIndex === index
-              ) {
+              } else if (editingIndex != null && editingIndex === index) {
                 let maxLength = task.length
                 tasks.slice(index + 1).every(behindTask => {
                   if (behindTask == null) {
@@ -108,6 +92,8 @@ class TimeTable extends React.PureComponent<Props> {
                 return (
                   <TaskComp
                     key={task.id}
+                    place={'TimeTable'}
+                    index={index}
                     task={task}
                     onClick={() => {
                       changeEditing('TimeTable', index)
@@ -143,14 +129,10 @@ const mapStateToProps = (state: State) => ({
   begin: state.setting.begin,
   end: state.setting.end,
   tasks: state.tasks,
-  editingTask:
+  editingIndex:
     state.session.editingPlace === 'TimeTable'
-      ? state.tasks[state.session.editingIndex]
-      : state.session.editingPlace === 'Stock'
-        ? state.stock[state.session.editingIndex]
-        : null,
-  editingPlace: state.session.editingPlace,
-  editingIndex: state.session.editingIndex,
+      ? state.session.editingIndex
+      : null,
 })
 
 const mapDispatchToProps = dispatch => ({

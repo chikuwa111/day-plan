@@ -15,9 +15,7 @@ import EditingTask from '../components/EditingTask'
 
 type Props = {|
   tasks: Array<Task>,
-  editingTask: ?Task,
-  editingPlace: EditingPlace,
-  editingIndex: number,
+  editingIndex: ?number,
   add: () => void,
   update: (number, Task) => void,
   destroy: number => void,
@@ -29,8 +27,6 @@ class Stock extends React.PureComponent<Props> {
   render() {
     const {
       tasks,
-      editingTask,
-      editingPlace,
       editingIndex,
       add,
       update,
@@ -42,19 +38,10 @@ class Stock extends React.PureComponent<Props> {
     return (
       <ContainerPaper>
         <Grid container direction="column" spacing={8}>
-          <EmptyTask
-            onClick={add}
-            onMove={
-              editingTask && editingPlace !== 'Stock'
-                ? () => {
-                    move(editingTask, editingPlace, editingIndex, 'Stock', 0)
-                  }
-                : null
-            }
-          />
+          <EmptyTask place={'Stock'} index={0} onClick={add} onDrop={move} />
           {tasks.map((task, index) => (
             <Grid item key={task.id}>
-              {editingPlace === 'Stock' && editingIndex === index ? (
+              {editingIndex != null && editingIndex === index ? (
                 <EditingTask
                   task={task}
                   maxLength={null}
@@ -68,6 +55,8 @@ class Stock extends React.PureComponent<Props> {
               ) : (
                 <TaskComp
                   task={task}
+                  place={'Stock'}
+                  index={index}
                   onClick={() => {
                     changeEditing('Stock', index)
                   }}
@@ -92,14 +81,8 @@ const ContainerPaper = styled(Paper)`
 
 const mapStateToProps = (state: State) => ({
   tasks: state.stock,
-  editingTask:
-    state.session.editingPlace === 'TimeTable'
-      ? state.tasks[state.session.editingIndex]
-      : state.session.editingPlace === 'Stock'
-        ? state.stock[state.session.editingIndex]
-        : null,
-  editingPlace: state.session.editingPlace,
-  editingIndex: state.session.editingIndex,
+  editingIndex:
+    state.session.editingPlace === 'Stock' ? state.session.editingIndex : null,
 })
 
 const mapDispatchToProps = dispatch => ({

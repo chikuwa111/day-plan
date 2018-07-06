@@ -4,7 +4,7 @@ import type { SessionState } from '../types'
 
 const initialState: SessionState = {
   editingPlace: null,
-  editingIndex: 999,
+  editingIndex: -1,
 }
 
 const session = (
@@ -35,11 +35,7 @@ const session = (
     case 'STOCK__DESTROY':
       return initialState
     case 'TASKS__MOVE':
-      return {
-        ...session,
-        editingPlace: action.to,
-        editingIndex: action.toIndex,
-      }
+      return initialState
     default:
       return session
   }

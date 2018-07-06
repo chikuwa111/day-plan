@@ -24,7 +24,7 @@ type State = {|
   menuElement: ?HTMLElement,
 |}
 
-export default class EditableTask extends React.PureComponent<Props, State> {
+export default class EditingTask extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -50,6 +50,11 @@ export default class EditableTask extends React.PureComponent<Props, State> {
     const { menuType, menuElement } = this.state
     const { task, maxLength, onChange, onDestroy } = this.props
 
+    const availableLengths =
+      maxLength == null
+        ? TimeLengths
+        : TimeLengths.filter(length => length <= maxLength)
+
     return (
       <Container task={task}>
         <BodyField
@@ -74,24 +79,21 @@ export default class EditableTask extends React.PureComponent<Props, State> {
           anchorEl={menuElement}
           onClose={this.closeMenu}
         >
-          {TimeLengths.map(
-            length =>
-              (maxLength == null || length <= maxLength) && (
-                <MenuItem
-                  key={length}
-                  selected={task.length === length}
-                  onClick={() => {
-                    onChange({
-                      ...task,
-                      length,
-                    })
-                    this.closeMenu()
-                  }}
-                >
-                  {length}
-                </MenuItem>
-              )
-          )}
+          {availableLengths.map(length => (
+            <MenuItem
+              key={length}
+              selected={task.length === length}
+              onClick={() => {
+                onChange({
+                  ...task,
+                  length,
+                })
+                this.closeMenu()
+              }}
+            >
+              {length}
+            </MenuItem>
+          ))}
         </Menu>
         <IconButton
           onClick={e => {
