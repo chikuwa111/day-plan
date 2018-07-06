@@ -3,12 +3,12 @@ import * as React from 'react'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { DragSource } from 'react-dnd'
-import type { Task, EditingPlace } from '../types'
+import type { Task, TaskPlace } from '../types'
 import Card from '@material-ui/core/Card'
 
 type Props = {|
   task: Task,
-  place: EditingPlace,
+  place: TaskPlace,
   index: number,
   onClick: () => void,
   connectDragSource: Function,

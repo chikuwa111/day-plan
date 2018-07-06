@@ -1,15 +1,15 @@
 // @flow
-import type { EditingPlace } from '../types'
+import type { TaskPlace } from '../types'
 type ChangeAction = {
   type: 'SESSION__CHANGE_EDITING',
-  editingPlace: EditingPlace,
-  editingIndex: number,
+  place: TaskPlace,
+  index: number,
 }
 
 export type SessionAction = ChangeAction
 
-export const change = (editingPlace: EditingPlace, editingIndex: number) => ({
+export const change = (place: TaskPlace, index: number) => ({
   type: 'SESSION__CHANGE_EDITING',
-  editingPlace,
-  editingIndex,
+  place,
+  index,
 })

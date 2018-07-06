@@ -1,5 +1,6 @@
 // @flow
-import uuid from 'uuid/v4'
+import { newTask } from '../lib/task'
+import { TaskPlaces } from '../constants'
 import type { Action } from '../actions'
 import type { TasksState } from '../types'
 
@@ -13,7 +14,7 @@ const tasks = (
     case 'TASKS__ADD':
       return [
         ...tasks.slice(0, action.index),
-        { id: uuid(), body: '', color: '#fafafa', length: 30 },
+        newTask(),
         ...tasks.slice(action.index + 1),
       ]
     case 'TASKS__UPDATE': {
@@ -53,7 +54,10 @@ const tasks = (
     }
     case 'TASKS__MOVE': {
       const taskSize = action.task.length / 30
-      if (action.from === 'TimeTable' && action.to === 'TimeTable') {
+      if (
+        action.from === TaskPlaces.TIMETABLE &&
+        action.to === TaskPlaces.TIMETABLE
+      ) {
         // TODO: taskの移動前後が被っているときの処理
         if (action.fromIndex <= action.toIndex) {
           return [
@@ -72,13 +76,13 @@ const tasks = (
             ...tasks.slice(action.fromIndex + 1),
           ]
         }
-      } else if (action.from === 'TimeTable') {
+      } else if (action.from === TaskPlaces.TIMETABLE) {
         return [
           ...tasks.slice(0, action.fromIndex),
           ...Array.from({ length: taskSize }, () => null),
           ...tasks.slice(action.fromIndex + 1),
         ]
-      } else if (action.to === 'TimeTable') {
+      } else if (action.to === TaskPlaces.TIMETABLE) {
         return [
           ...tasks.slice(0, action.toIndex),
           action.task,

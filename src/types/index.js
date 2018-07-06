@@ -1,10 +1,10 @@
 // @flow
 
 export type State = {
-  +tasks: TasksState,
-  +setting: SettingState,
-  +stock: StockState,
-  +session: SessionState,
+  tasks: TasksState,
+  setting: SettingState,
+  stock: StockState,
+  session: SessionState,
 }
 
 export type TasksState = Array<?Task>
@@ -18,8 +18,10 @@ export type SettingState = {|
 export type StockState = Array<Task>
 
 export type SessionState = {|
-  editingPlace: EditingPlace,
-  editingIndex: number,
+  editing: {
+    place: TaskPlace,
+    index: number,
+  },
 |}
 
 export type Task = {|
@@ -29,4 +31,4 @@ export type Task = {|
   length: number,
 |}
 
-export type EditingPlace = ?('TimeTable' | 'Stock')
+export type TaskPlace = ?('TimeTable' | 'Stock')

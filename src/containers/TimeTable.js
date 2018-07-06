@@ -3,7 +3,8 @@ import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import type { State, Task, EditingPlace } from '../types'
+import { TaskPlaces } from '../constants'
+import type { State, Task, TaskPlace } from '../types'
 import { add, update, destroy, move } from '../actions/tasks'
 import { change } from '../actions/session'
 import Grid from '@material-ui/core/Grid'
@@ -20,8 +21,8 @@ type Props = {|
   add: number => void,
   update: (number, Task) => void,
   destroy: number => void,
-  move: (Task, EditingPlace, number, EditingPlace, number) => void,
-  changeEditing: (EditingPlace, number) => void,
+  move: (Task, TaskPlace, number, TaskPlace, number) => void,
+  changeEditing: (TaskPlace, number) => void,
 |}
 
 class TimeTable extends React.PureComponent<Props> {
@@ -58,7 +59,7 @@ class TimeTable extends React.PureComponent<Props> {
                 return (
                   <EmptyTask
                     key={index}
-                    place={'TimeTable'}
+                    place={TaskPlaces.TIMETABLE}
                     index={index}
                     onClick={() => {
                       add(index)
@@ -92,11 +93,11 @@ class TimeTable extends React.PureComponent<Props> {
                 return (
                   <TaskComp
                     key={task.id}
-                    place={'TimeTable'}
+                    place={TaskPlaces.TIMETABLE}
                     index={index}
                     task={task}
                     onClick={() => {
-                      changeEditing('TimeTable', index)
+                      changeEditing(TaskPlaces.TIMETABLE, index)
                     }}
                   />
                 )
@@ -130,14 +131,14 @@ const mapStateToProps = (state: State) => ({
   end: state.setting.end,
   tasks: state.tasks,
   editingIndex:
-    state.session.editingPlace === 'TimeTable'
-      ? state.session.editingIndex
+    state.session.editing.place === TaskPlaces.TIMETABLE
+      ? state.session.editing.index
       : null,
 })
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators({ add, update, destroy, move }, dispatch),
-  changeEditing: (editingPlace: EditingPlace, editingIndex: number) => {
+  changeEditing: (editingPlace: TaskPlace, editingIndex: number) => {
     dispatch(change(editingPlace, editingIndex))
   },
 })

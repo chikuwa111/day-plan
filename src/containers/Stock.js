@@ -3,7 +3,8 @@ import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import type { State, Task, EditingPlace } from '../types'
+import { TaskPlaces } from '../constants'
+import type { State, Task, TaskPlace } from '../types'
 import { add, update, destroy } from '../actions/stock'
 import { move } from '../actions/tasks'
 import { change } from '../actions/session'
@@ -19,8 +20,8 @@ type Props = {|
   add: () => void,
   update: (number, Task) => void,
   destroy: number => void,
-  move: (Task, EditingPlace, number, EditingPlace, number) => void,
-  changeEditing: (EditingPlace, number) => void,
+  move: (Task, TaskPlace, number, TaskPlace, number) => void,
+  changeEditing: (TaskPlace, number) => void,
 |}
 
 class Stock extends React.PureComponent<Props> {
@@ -38,7 +39,12 @@ class Stock extends React.PureComponent<Props> {
     return (
       <ContainerPaper>
         <Grid container direction="column" spacing={8}>
-          <EmptyTask place={'Stock'} index={0} onClick={add} onDrop={move} />
+          <EmptyTask
+            place={TaskPlaces.STOCK}
+            index={0}
+            onClick={add}
+            onDrop={move}
+          />
           {tasks.map((task, index) => (
             <Grid item key={task.id}>
               {editingIndex != null && editingIndex === index ? (
@@ -55,10 +61,10 @@ class Stock extends React.PureComponent<Props> {
               ) : (
                 <TaskComp
                   task={task}
-                  place={'Stock'}
+                  place={TaskPlaces.STOCK}
                   index={index}
                   onClick={() => {
-                    changeEditing('Stock', index)
+                    changeEditing(TaskPlaces.STOCK, index)
                   }}
                 />
               )}
@@ -82,12 +88,14 @@ const ContainerPaper = styled(Paper)`
 const mapStateToProps = (state: State) => ({
   tasks: state.stock,
   editingIndex:
-    state.session.editingPlace === 'Stock' ? state.session.editingIndex : null,
+    state.session.editing.place === TaskPlaces.STOCK
+      ? state.session.editing.index
+      : null,
 })
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators({ add, update, destroy, move }, dispatch),
-  changeEditing: (editingPlace: EditingPlace, editingIndex: number) => {
+  changeEditing: (editingPlace: TaskPlace, editingIndex: number) => {
     dispatch(change(editingPlace, editingIndex))
   },
 })

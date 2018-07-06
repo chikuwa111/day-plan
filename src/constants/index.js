@@ -1,5 +1,10 @@
 // @flow
 
+export const TaskPlaces = {
+  TIMETABLE: 'TimeTable',
+  STOCK: 'Stock',
+}
+
 export const Colors = [
   '#fafafa', // white
   '#ffd180', // orange

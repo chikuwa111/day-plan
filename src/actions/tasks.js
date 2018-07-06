@@ -1,5 +1,5 @@
 // @flow
-import type { Task, EditingPlace } from '../types'
+import type { Task, TaskPlace } from '../types'
 
 type AddAction = { type: 'TASKS__ADD', index: number }
 type UpdateAction = { type: 'TASKS__UPDATE', index: number, task: Task }
@@ -7,9 +7,9 @@ type DestroyAction = { type: 'TASKS__DESTROY', index: number }
 type MoveAction = {
   type: 'TASKS__MOVE',
   task: Task,
-  from: EditingPlace,
+  from: TaskPlace,
   fromIndex: number,
-  to: EditingPlace,
+  to: TaskPlace,
   toIndex: number,
 }
 
@@ -33,9 +33,9 @@ export const destroy = (index: number) => ({
 
 export const move = (
   task: Task,
-  from: EditingPlace,
+  from: TaskPlace,
   fromIndex: number,
-  to: EditingPlace,
+  to: TaskPlace,
   toIndex: number
 ) => ({
   type: 'TASKS__MOVE',

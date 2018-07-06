@@ -3,13 +3,13 @@ import * as React from 'react'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { DropTarget } from 'react-dnd'
-import type { Task, EditingPlace } from '../types'
+import type { Task, TaskPlace } from '../types'
 
 type Props = {|
-  place: EditingPlace,
+  place: TaskPlace,
   index: number,
   onClick: () => void,
-  onDrop: (Task, EditingPlace, number, EditingPlace, number) => void,
+  onDrop: (Task, TaskPlace, number, TaskPlace, number) => void,
   connectDropTarget: Function,
 |}
 
