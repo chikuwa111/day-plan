@@ -137,8 +137,21 @@ const getColor = (isOver, canDrop) => {
 
 const Target = styled.div`
   width: 100%;
-  height: ${props => (props.displayPreview ? props.length / 15 : 2)}rem;
+  height: 2rem;
   opacity: 0.5;
   background-color: ${props => props.color};
-  border-radius: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2rem;
+    width: 100%;
+    height: ${props =>
+      props.displayPreview ? (props.length - 30) / 15 : 0}rem;
+    background-color: ${props => props.color};
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
 `
