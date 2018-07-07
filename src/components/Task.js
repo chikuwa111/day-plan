@@ -58,15 +58,17 @@ export default DragSource('TASK', dragSource, collect)(
         <CoveredContainer>
           <DragSourceDiv innerRef={instance => connectDragSource(instance)} />
           {isDragging &&
-            place === TaskPlaces.TIMETABLE && (
-              <DropTargets
-                task={task}
+            place === TaskPlaces.TIMETABLE &&
+            Array.from({ length: task.length / 30 - 1 }, (_, i) => (
+              <EmptyTask
+                key={i}
+                offset={i + 1}
                 place={place}
                 index={index}
                 tasks={tasks}
                 onDrop={onDrop}
               />
-            )}
+            ))}
         </CoveredContainer>
       </div>
     )
@@ -106,21 +108,3 @@ const DragSourceDiv = styled.div`
   height: 2rem;
   cursor: move;
 `
-
-const DropTargets = ({ task, place, index, tasks, onDrop }) => {
-  const EmptyTasks = []
-  const taskSize = task.length / 30
-  for (let i = 1; i < taskSize; i++) {
-    EmptyTasks.push(
-      <EmptyTask
-        key={i}
-        offset={i}
-        place={place}
-        index={index}
-        tasks={tasks}
-        onDrop={onDrop}
-      />
-    )
-  }
-  return EmptyTasks
-}
