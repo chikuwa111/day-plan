@@ -2,6 +2,7 @@
 import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
@@ -24,8 +25,28 @@ type Props = {|
   changeEditing: (TaskPlace, number) => void,
 |}
 
-class TimeTable extends React.PureComponent<Props> {
-  render() {
+const mapStateToProps = (state: State) => ({
+  begin: state.setting.begin,
+  end: state.setting.end,
+  tasks: state.tasks,
+  editingIndex:
+    state.session.editing.place === TaskPlaces.TIMETABLE
+      ? state.session.editing.index
+      : null,
+})
+
+const mapDispatchToProps = dispatch => ({
+  ...bindActionCreators({ add, update, destroy }, dispatch),
+  changeEditing: (place: TaskPlace, index: number) => {
+    dispatch(change(place, index))
+  },
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
+  pure(function TimeTable(props: Props) {
     const {
       begin,
       end,
@@ -35,7 +56,7 @@ class TimeTable extends React.PureComponent<Props> {
       update,
       destroy,
       changeEditing,
-    } = this.props
+    } = props
 
     return (
       <Container>
@@ -52,7 +73,7 @@ class TimeTable extends React.PureComponent<Props> {
           </Grid>
           <Grid item xs={10} sm={11}>
             <MarginDiv />
-            {tasks.map((task, index, tasks) => {
+            {tasks.map((task, index) => {
               if (task == null) {
                 return (
                   <EmptyTask
@@ -104,8 +125,8 @@ class TimeTable extends React.PureComponent<Props> {
         </GridWrapper>
       </Container>
     )
-  }
-}
+  })
+)
 
 const Container = styled.div`
   width: 100%;
@@ -122,25 +143,3 @@ const GridWrapper = styled(Grid)`
 const MarginDiv = styled.div`
   height: 0.8rem;
 `
-
-const mapStateToProps = (state: State) => ({
-  begin: state.setting.begin,
-  end: state.setting.end,
-  tasks: state.tasks,
-  editingIndex:
-    state.session.editing.place === TaskPlaces.TIMETABLE
-      ? state.session.editing.index
-      : null,
-})
-
-const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ add, update, destroy }, dispatch),
-  changeEditing: (place: TaskPlace, index: number) => {
-    dispatch(change(place, index))
-  },
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TimeTable)

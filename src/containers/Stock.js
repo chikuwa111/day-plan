@@ -2,6 +2,7 @@
 import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
@@ -22,16 +23,27 @@ type Props = {|
   changeEditing: (TaskPlace, number) => void,
 |}
 
-class Stock extends React.PureComponent<Props> {
-  render() {
-    const {
-      tasks,
-      editingIndex,
-      add,
-      update,
-      destroy,
-      changeEditing,
-    } = this.props
+const mapStateToProps = (state: State) => ({
+  tasks: state.stock,
+  editingIndex:
+    state.session.editing.place === TaskPlaces.STOCK
+      ? state.session.editing.index
+      : null,
+})
+
+const mapDispatchToProps = dispatch => ({
+  ...bindActionCreators({ add, update, destroy }, dispatch),
+  changeEditing: (place: TaskPlace, index: number) => {
+    dispatch(change(place, index))
+  },
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
+  pure(function Stock(props: Props) {
+    const { tasks, editingIndex, add, update, destroy, changeEditing } = props
 
     return (
       <ContainerPaper>
@@ -65,8 +77,8 @@ class Stock extends React.PureComponent<Props> {
         </Grid>
       </ContainerPaper>
     )
-  }
-}
+  })
+)
 
 const ContainerPaper = styled(Paper)`
   && {
@@ -76,23 +88,3 @@ const ContainerPaper = styled(Paper)`
     overflow: auto;
   }
 `
-
-const mapStateToProps = (state: State) => ({
-  tasks: state.stock,
-  editingIndex:
-    state.session.editing.place === TaskPlaces.STOCK
-      ? state.session.editing.index
-      : null,
-})
-
-const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ add, update, destroy }, dispatch),
-  changeEditing: (place: TaskPlace, index: number) => {
-    dispatch(change(place, index))
-  },
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Stock)
