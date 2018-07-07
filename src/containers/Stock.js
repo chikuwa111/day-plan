@@ -6,8 +6,8 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
-import { add, update, destroy } from '../actions/stock'
-import { change } from '../actions/session'
+import { addStock, updateStock, destroyStock } from '../actions/stock'
+import { changeEditing } from '../actions/session'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import TaskComp from '../components/Task'
@@ -17,9 +17,9 @@ import EditingTask from '../components/EditingTask'
 type Props = {|
   tasks: Array<Task>,
   editingIndex: ?number,
-  add: () => void,
-  update: (number, Task) => void,
-  destroy: number => void,
+  addStock: () => void,
+  updateStock: (number, Task) => void,
+  destroyStock: number => void,
   changeEditing: (TaskPlace, number) => void,
 |}
 
@@ -32,10 +32,10 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ add, update, destroy }, dispatch),
-  changeEditing: (place: TaskPlace, index: number) => {
-    dispatch(change(place, index))
-  },
+  ...bindActionCreators(
+    { addStock, updateStock, destroyStock, changeEditing },
+    dispatch
+  ),
 })
 
 export default connect(
@@ -43,23 +43,30 @@ export default connect(
   mapDispatchToProps
 )(
   pure(function Stock(props: Props) {
-    const { tasks, editingIndex, add, update, destroy, changeEditing } = props
+    const {
+      tasks,
+      editingIndex,
+      addStock,
+      updateStock,
+      destroyStock,
+      changeEditing,
+    } = props
 
     return (
       <ContainerPaper>
         <Grid container direction="column" spacing={8}>
-          <EmptyTask place={TaskPlaces.STOCK} index={0} onClick={add} />
+          <EmptyTask place={TaskPlaces.STOCK} index={0} onClick={addStock} />
           {tasks.map((task, index) => (
             <Grid item key={task.id}>
               {editingIndex != null && editingIndex === index ? (
                 <EditingTask
                   task={task}
                   maxLength={null}
-                  onChange={(t: Task) => {
-                    update(index, t)
+                  onChange={(task: Task) => {
+                    updateStock(index, task)
                   }}
                   onDestroy={() => {
-                    destroy(index)
+                    destroyStock(index)
                   }}
                 />
               ) : (

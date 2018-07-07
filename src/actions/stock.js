@@ -7,17 +7,17 @@ type DestroyAction = { type: 'STOCK__DESTROY', index: number }
 
 export type StockAction = AddAction | UpdateAction | DestroyAction
 
-export const add = () => ({
+export const addStock = () => ({
   type: 'STOCK__ADD',
 })
 
-export const update = (index: number, task: Task) => ({
+export const updateStock = (index: number, task: Task) => ({
   type: 'STOCK__UPDATE',
   index,
   task,
 })
 
-export const destroy = (index: number) => ({
+export const destroyStock = (index: number) => ({
   type: 'STOCK__DESTROY',
   index,
 })

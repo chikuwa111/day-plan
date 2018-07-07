@@ -16,23 +16,23 @@ type MoveAction = {
 
 export type TasksAction = AddAction | UpdateAction | DestroyAction | MoveAction
 
-export const add = (index: number) => ({
+export const addTask = (index: number) => ({
   type: 'TASKS__ADD',
   index,
 })
 
-export const update = (index: number, task: Task) => ({
+export const updateTask = (index: number, task: Task) => ({
   type: 'TASKS__UPDATE',
   index,
   task,
 })
 
-export const destroy = (index: number) => ({
+export const destroyTask = (index: number) => ({
   type: 'TASKS__DESTROY',
   index,
 })
 
-export const move = (
+export const moveTask = (
   task: Task,
   from: TaskPlace,
   fromIndex: number,

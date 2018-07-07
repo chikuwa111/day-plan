@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { DropTarget } from 'react-dnd'
-import { move } from '../actions/tasks'
+import { moveTask } from '../actions/tasks'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
 
@@ -15,7 +15,7 @@ type Props = {|
   offset?: number,
 
   tasks: Array<Task>,
-  move: (
+  moveTask: (
     task: Task,
     from: TaskPlace,
     fromIndex: number,
@@ -39,13 +39,20 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ move }, dispatch),
+  ...bindActionCreators({ moveTask }, dispatch),
 })
 
 const dropTarget = {
   drop(props: Props, monitor) {
     const { task, place, index } = monitor.getItem()
-    props.move(task, place, index, props.place, props.index, props.offset || 0)
+    props.moveTask(
+      task,
+      place,
+      index,
+      props.place,
+      props.index,
+      props.offset || 0
+    )
   },
   canDrop(props, monitor) {
     const {

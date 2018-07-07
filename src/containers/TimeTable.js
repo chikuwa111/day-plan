@@ -6,8 +6,8 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
-import { add, update, destroy } from '../actions/tasks'
-import { change } from '../actions/session'
+import { addTask, updateTask, destroyTask } from '../actions/tasks'
+import { changeEditing } from '../actions/session'
 import Grid from '@material-ui/core/Grid'
 import Timeline from '../components/Timeline'
 import TaskComp from '../components/Task'
@@ -19,9 +19,9 @@ type Props = {|
   end: number,
   tasks: Array<?Task>,
   editingIndex: number,
-  add: number => void,
-  update: (number, Task) => void,
-  destroy: number => void,
+  addTask: number => void,
+  updateTask: (number, Task) => void,
+  destroyTask: number => void,
   changeEditing: (TaskPlace, number) => void,
 |}
 
@@ -36,10 +36,10 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ add, update, destroy }, dispatch),
-  changeEditing: (place: TaskPlace, index: number) => {
-    dispatch(change(place, index))
-  },
+  ...bindActionCreators(
+    { addTask, updateTask, destroyTask, changeEditing },
+    dispatch
+  ),
 })
 
 export default connect(
@@ -52,9 +52,9 @@ export default connect(
       end,
       tasks,
       editingIndex,
-      add,
-      update,
-      destroy,
+      addTask,
+      updateTask,
+      destroyTask,
       changeEditing,
     } = props
 
@@ -81,7 +81,7 @@ export default connect(
                     place={TaskPlaces.TIMETABLE}
                     index={index}
                     onClick={() => {
-                      add(index)
+                      addTask(index)
                     }}
                   />
                 )
@@ -100,10 +100,10 @@ export default connect(
                     task={task}
                     maxLength={maxLength}
                     onChange={(task: Task) => {
-                      update(index, task)
+                      updateTask(index, task)
                     }}
                     onDestroy={() => {
-                      destroy(index)
+                      destroyTask(index)
                     }}
                   />
                 )
