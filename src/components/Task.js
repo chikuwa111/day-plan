@@ -44,7 +44,7 @@ export default DragSource('TASK', dragSource, collect)(
 
     return connectDragPreview(
       <div>
-        <Container isDragging={isDragging} task={task} onClick={onClick}>
+        <Container opacity={isDragging ? 0.5 : 1} task={task} onClick={onClick}>
           <Body>{task.body}</Body>
           <DragSourceDiv innerRef={instance => connectDragSource(instance)} />
         </Container>
@@ -59,7 +59,7 @@ const Container = styled(Card)`
     height: ${props => props.task.length / 15}rem;
     background-color: ${props => props.task.color};
     font-size: ${props => 0.8 + props.task.length / 150}rem;
-    opacity: ${props => (props.isDragging ? 0.5 : 1)};
+    opacity: ${props => props.opacity};
     display: flex;
     align-items: center;
     position: relative;
