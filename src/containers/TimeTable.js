@@ -21,7 +21,7 @@ type Props = {|
   add: number => void,
   update: (number, Task) => void,
   destroy: number => void,
-  move: (Task, TaskPlace, number, number) => void,
+  move: (Task, TaskPlace, number, number, number) => void,
   changeEditing: (TaskPlace, number) => void,
 |}
 
@@ -97,9 +97,11 @@ class TimeTable extends React.PureComponent<Props> {
                     place={TaskPlaces.TIMETABLE}
                     index={index}
                     task={task}
+                    tasks={tasks}
                     onClick={() => {
                       changeEditing(TaskPlaces.TIMETABLE, index)
                     }}
+                    onDrop={move}
                   />
                 )
               }

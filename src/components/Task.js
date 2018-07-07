@@ -3,14 +3,18 @@ import * as React from 'react'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { DragSource } from 'react-dnd'
+import { TaskPlaces } from '../constants'
 import type { Task, TaskPlace } from '../types'
 import Card from '@material-ui/core/Card'
+import EmptyTask from '../components/EmptyTask'
 
 type Props = {|
   task: Task,
   place: TaskPlace,
   index: number,
+  tasks: Array<Task>,
   onClick: () => void,
+  onDrop: (Task, TaskPlace, number, number, number) => void,
   connectDragSource: Function,
   connectDragPreview: Function,
   isDragging: boolean,
@@ -36,22 +40,42 @@ export default DragSource('TASK', dragSource, collect)(
   pure(function Task(props: Props) {
     const {
       task,
+      place,
+      index,
+      tasks,
       onClick,
+      onDrop,
       connectDragSource,
       connectDragPreview,
       isDragging,
     } = props
 
     return connectDragPreview(
-      <div>
+      <div style={wrapperStyle}>
         <Container opacity={isDragging ? 0.5 : 1} task={task} onClick={onClick}>
           <Body>{task.body}</Body>
-          <DragSourceDiv innerRef={instance => connectDragSource(instance)} />
         </Container>
+        <CoveredContainer>
+          <DragSourceDiv innerRef={instance => connectDragSource(instance)} />
+          {isDragging &&
+            place === TaskPlaces.TIMETABLE && (
+              <DropTargets
+                task={task}
+                place={place}
+                index={index}
+                tasks={tasks}
+                onDrop={onDrop}
+              />
+            )}
+        </CoveredContainer>
       </div>
     )
   })
 )
+
+const wrapperStyle = {
+  position: 'relative',
+}
 
 const Container = styled(Card)`
   && {
@@ -62,7 +86,7 @@ const Container = styled(Card)`
     opacity: ${props => props.opacity};
     display: flex;
     align-items: center;
-    position: relative;
+    cursor: pointer;
   }
 `
 
@@ -72,9 +96,31 @@ const Body = styled.div`
   word-break: break-all;
 `
 
-const DragSourceDiv = styled.div`
+const CoveredContainer = styled.div`
   position: absolute;
-  width: 100%;
-  height: 2rem;
   top: 0;
+  width: 100%;
 `
+
+const DragSourceDiv = styled.div`
+  height: 2rem;
+  cursor: move;
+`
+
+const DropTargets = ({ task, place, index, tasks, onDrop }) => {
+  const EmptyTasks = []
+  const taskSize = task.length / 30
+  for (let i = 1; i < taskSize; i++) {
+    EmptyTasks.push(
+      <EmptyTask
+        key={i}
+        offset={i}
+        place={place}
+        index={index}
+        tasks={tasks}
+        onDrop={onDrop}
+      />
+    )
+  }
+  return EmptyTasks
+}

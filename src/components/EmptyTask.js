@@ -9,9 +9,10 @@ import type { Task, TaskPlace } from '../types'
 type Props = {|
   place: TaskPlace,
   index: number,
+  offset?: number,
   tasks: Array<Task>,
-  onClick: () => void,
-  onDrop: (Task, TaskPlace, number, number) => void,
+  onClick?: () => void,
+  onDrop: (Task, TaskPlace, number, number, ?number) => void,
   connectDropTarget: Function,
   isOver: boolean,
   canDrop: boolean,
@@ -23,9 +24,9 @@ type Props = {|
 |}
 
 const dropTarget = {
-  drop(props, monitor) {
+  drop(props: Props, monitor) {
     const { task, place, index } = monitor.getItem()
-    props.onDrop(task, place, index, props.index)
+    props.onDrop(task, place, index, props.index, props.offset)
   },
   canDrop(props, monitor) {
     const {
@@ -33,7 +34,7 @@ const dropTarget = {
       place: from,
       index: fromIndex,
     } = monitor.getItem()
-    const { place: to, index: toIndex, tasks } = props
+    const { place: to, index: toIndex, offset, tasks } = props
 
     if (from === TaskPlaces.STOCK && to === TaskPlaces.STOCK) {
       return false
@@ -51,6 +52,13 @@ const dropTarget = {
     }
     if (from === TaskPlaces.TIMETABLE && to === TaskPlaces.TIMETABLE) {
       const taskSize = draggedTask.length / 30
+      if (fromIndex === toIndex && offset) {
+        const dropTargets = tasks.slice(toIndex + 1, toIndex + 1 + offset)
+        return (
+          dropTargets.length >= offset &&
+          dropTargets.every(task => task == null)
+        )
+      }
       const moveSize = Math.abs(toIndex - fromIndex)
       if (toIndex < fromIndex && moveSize < taskSize) {
         const dropTargets = tasks.slice(toIndex, fromIndex)

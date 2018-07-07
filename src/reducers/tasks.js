@@ -55,7 +55,15 @@ const tasks = (
     case 'TASKS__MOVE': {
       const taskSize = action.task.length / 30
       if (action.from === TaskPlaces.TIMETABLE) {
-        if (action.fromIndex <= action.toIndex) {
+        if (action.fromIndex === action.toIndex) {
+          return [
+            ...tasks.slice(0, action.fromIndex),
+            ...Array.from({ length: action.offset }, () => null),
+            action.task,
+            ...tasks.slice(action.toIndex + 1 + action.offset),
+          ]
+        }
+        if (action.fromIndex < action.toIndex) {
           return [
             ...tasks.slice(0, action.fromIndex),
             ...Array.from({ length: taskSize }, () => null),
