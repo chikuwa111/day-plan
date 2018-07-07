@@ -51,8 +51,8 @@ export default DragSource('TASK', dragSource, collect)(
     } = props
 
     return connectDragPreview(
-      <div style={wrapperStyle}>
-        <Container opacity={isDragging ? 0.5 : 1} task={task} onClick={onClick}>
+      <div style={wrapperStyle} onClick={onClick}>
+        <Container opacity={isDragging ? 0.5 : 1} task={task}>
           <Body>{task.body}</Body>
         </Container>
         <CoveredContainer>
