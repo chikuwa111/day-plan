@@ -61,6 +61,7 @@ class TimeTable extends React.PureComponent<Props> {
                     key={index}
                     place={TaskPlaces.TIMETABLE}
                     index={index}
+                    tasks={tasks}
                     onClick={() => {
                       add(index)
                     }}

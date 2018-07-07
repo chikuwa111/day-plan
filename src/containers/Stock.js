@@ -41,6 +41,7 @@ class Stock extends React.PureComponent<Props> {
           <EmptyTask
             place={TaskPlaces.STOCK}
             index={0}
+            tasks={tasks}
             onClick={add}
             onDrop={move}
           />

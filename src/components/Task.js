@@ -13,6 +13,7 @@ type Props = {|
   onClick: () => void,
   connectDragSource: Function,
   connectDragPreview: Function,
+  isDragging: boolean,
 |}
 
 const dragSource = {
@@ -28,15 +29,22 @@ const dragSource = {
 const collect = (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),
+  isDragging: monitor.isDragging(),
 })
 
 export default DragSource('TASK', dragSource, collect)(
   pure(function Task(props: Props) {
-    const { task, onClick, connectDragSource, connectDragPreview } = props
+    const {
+      task,
+      onClick,
+      connectDragSource,
+      connectDragPreview,
+      isDragging,
+    } = props
 
     return connectDragPreview(
       <div>
-        <Container task={task} onClick={onClick}>
+        <Container isDragging={isDragging} task={task} onClick={onClick}>
           <Body>{task.body}</Body>
           <DragSourceDiv innerRef={instance => connectDragSource(instance)} />
         </Container>
@@ -51,6 +59,7 @@ const Container = styled(Card)`
     height: ${props => props.task.length / 15}rem;
     background-color: ${props => props.task.color};
     font-size: ${props => 0.8 + props.task.length / 150}rem;
+    opacity: ${props => (props.isDragging ? 0.5 : 1)};
     display: flex;
     align-items: center;
     position: relative;
