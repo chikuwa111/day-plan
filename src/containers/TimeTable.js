@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
-import { add, update, destroy, move } from '../actions/tasks'
+import { add, update, destroy } from '../actions/tasks'
 import { change } from '../actions/session'
 import Grid from '@material-ui/core/Grid'
 import Timeline from '../components/Timeline'
@@ -21,7 +21,6 @@ type Props = {|
   add: number => void,
   update: (number, Task) => void,
   destroy: number => void,
-  move: (Task, TaskPlace, number, number, number) => void,
   changeEditing: (TaskPlace, number) => void,
 |}
 
@@ -35,7 +34,6 @@ class TimeTable extends React.PureComponent<Props> {
       add,
       update,
       destroy,
-      move,
       changeEditing,
     } = this.props
 
@@ -61,11 +59,9 @@ class TimeTable extends React.PureComponent<Props> {
                     key={index}
                     place={TaskPlaces.TIMETABLE}
                     index={index}
-                    tasks={tasks}
                     onClick={() => {
                       add(index)
                     }}
-                    onDrop={move}
                   />
                 )
               } else if (editingIndex != null && editingIndex === index) {
@@ -97,11 +93,9 @@ class TimeTable extends React.PureComponent<Props> {
                     place={TaskPlaces.TIMETABLE}
                     index={index}
                     task={task}
-                    tasks={tasks}
                     onClick={() => {
                       changeEditing(TaskPlaces.TIMETABLE, index)
                     }}
-                    onDrop={move}
                   />
                 )
               }
@@ -140,7 +134,7 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ add, update, destroy, move }, dispatch),
+  ...bindActionCreators({ add, update, destroy }, dispatch),
   changeEditing: (place: TaskPlace, index: number) => {
     dispatch(change(place, index))
   },

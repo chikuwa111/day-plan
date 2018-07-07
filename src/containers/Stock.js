@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
-import { add, update, destroy, move } from '../actions/stock'
+import { add, update, destroy } from '../actions/stock'
 import { change } from '../actions/session'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
@@ -19,7 +19,6 @@ type Props = {|
   add: () => void,
   update: (number, Task) => void,
   destroy: number => void,
-  move: (Task, TaskPlace, number, number) => void,
   changeEditing: (TaskPlace, number) => void,
 |}
 
@@ -31,20 +30,13 @@ class Stock extends React.PureComponent<Props> {
       add,
       update,
       destroy,
-      move,
       changeEditing,
     } = this.props
 
     return (
       <ContainerPaper>
         <Grid container direction="column" spacing={8}>
-          <EmptyTask
-            place={TaskPlaces.STOCK}
-            index={0}
-            tasks={tasks}
-            onClick={add}
-            onDrop={move}
-          />
+          <EmptyTask place={TaskPlaces.STOCK} index={0} onClick={add} />
           {tasks.map((task, index) => (
             <Grid item key={task.id}>
               {editingIndex != null && editingIndex === index ? (
@@ -94,7 +86,7 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ add, update, destroy, move }, dispatch),
+  ...bindActionCreators({ add, update, destroy }, dispatch),
   changeEditing: (place: TaskPlace, index: number) => {
     dispatch(change(place, index))
   },

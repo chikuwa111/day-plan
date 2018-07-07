@@ -6,15 +6,14 @@ import { DragSource } from 'react-dnd'
 import { TaskPlaces } from '../constants'
 import type { Task, TaskPlace } from '../types'
 import Card from '@material-ui/core/Card'
-import EmptyTask from '../components/EmptyTask'
+import DropTarget from '../containers/DropTarget'
 
 type Props = {|
   task: Task,
   place: TaskPlace,
   index: number,
-  tasks: Array<Task>,
   onClick: () => void,
-  onDrop: (Task, TaskPlace, number, number, number) => void,
+
   connectDragSource: Function,
   connectDragPreview: Function,
   isDragging: boolean,
@@ -42,9 +41,7 @@ export default DragSource('TASK', dragSource, collect)(
       task,
       place,
       index,
-      tasks,
       onClick,
-      onDrop,
       connectDragSource,
       connectDragPreview,
       isDragging,
@@ -60,14 +57,7 @@ export default DragSource('TASK', dragSource, collect)(
           {isDragging &&
             place === TaskPlaces.TIMETABLE &&
             Array.from({ length: task.length / 30 - 1 }, (_, i) => (
-              <EmptyTask
-                key={i}
-                offset={i + 1}
-                place={place}
-                index={index}
-                tasks={tasks}
-                onDrop={onDrop}
-              />
+              <DropTarget key={i} offset={i + 1} place={place} index={index} />
             ))}
         </CoveredContainer>
       </div>

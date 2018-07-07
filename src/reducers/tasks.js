@@ -54,7 +54,10 @@ const tasks = (
     }
     case 'TASKS__MOVE': {
       const taskSize = action.task.length / 30
-      if (action.from === TaskPlaces.TIMETABLE) {
+      if (
+        action.from === TaskPlaces.TIMETABLE &&
+        action.to === TaskPlaces.TIMETABLE
+      ) {
         if (action.fromIndex === action.toIndex) {
           return [
             ...tasks.slice(0, action.fromIndex),
@@ -89,21 +92,22 @@ const tasks = (
           ...tasks.slice(action.fromIndex + 1),
         ]
       }
-      return [
-        ...tasks.slice(0, action.toIndex),
-        action.task,
-        ...tasks.slice(action.toIndex + taskSize),
-      ]
-    }
-    case 'STOCK__MOVE':
       if (action.from === TaskPlaces.TIMETABLE) {
         return [
           ...tasks.slice(0, action.fromIndex),
-          ...Array.from({ length: action.task.length / 30 }, () => null),
+          ...Array.from({ length: taskSize }, () => null),
           ...tasks.slice(action.fromIndex + 1),
         ]
       }
+      if (action.to === TaskPlaces.TIMETABLE) {
+        return [
+          ...tasks.slice(0, action.toIndex),
+          action.task,
+          ...tasks.slice(action.toIndex + taskSize),
+        ]
+      }
       return tasks
+    }
     default:
       return tasks
   }
