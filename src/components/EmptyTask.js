@@ -29,6 +29,7 @@ export default pure(function EmptyTask(props: Props) {
 const Container = styled.div`
   width: 100%;
   position: relative;
+  cursor: pointer;
 `
 
 const Wrapper = styled.div`
@@ -44,7 +45,6 @@ const Wrapper = styled.div`
   color: lightgray;
   display: flex;
   align-items: center;
-  cursor: pointer;
 `
 
 const Body = styled.div`
