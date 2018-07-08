@@ -15,7 +15,7 @@ import EmptyTask from '../components/EmptyTask'
 import EditingTask from '../components/EditingTask'
 
 type Props = {|
-  begin: number,
+  start: number,
   end: number,
   tasks: Array<?Task>,
   editingIndex: number,
@@ -28,7 +28,7 @@ type Props = {|
 const mapStateToProps = (state: State) => {
   const plan = state.plans.plans[state.plans.active]
   return {
-    begin: plan.begin,
+    start: plan.start,
     end: plan.end,
     tasks: plan.tasks,
     editingIndex:
@@ -51,7 +51,7 @@ export default connect(
 )(
   pure(function TimeTable(props: Props) {
     const {
-      begin,
+      start,
       end,
       tasks,
       editingIndex,
@@ -72,7 +72,7 @@ export default connect(
               changeEditing(null, 999)
             }}
           >
-            <Timeline begin={begin} end={end} />
+            <Timeline start={start} end={end} />
           </Grid>
           <Grid item xs={10} sm={11}>
             <MarginDiv />

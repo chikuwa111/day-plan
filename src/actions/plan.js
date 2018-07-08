@@ -4,7 +4,7 @@ type SwitchAction = { type: 'PLAN__SWITCH', index: number }
 type UpdateTitleAction = { type: 'PLAN__UPDATE_TITLE', title: string }
 type UpdateTimeAction = {
   type: 'PLAN__UPDATE_TIME',
-  name: 'begin' | 'end',
+  name: 'start' | 'end',
   time: number,
 }
 
@@ -28,7 +28,7 @@ export const updateTitle = (title: string) => ({
   title,
 })
 
-export const updateTime = (name: 'begin' | 'end', time: number) => ({
+export const updateTime = (name: 'start' | 'end', time: number) => ({
   type: 'PLAN__UPDATE_TIME',
   name,
   time,

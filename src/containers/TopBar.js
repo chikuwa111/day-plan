@@ -4,24 +4,27 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import type { State, PlansState } from '../types'
-import { addPlan, switchPlan } from '../actions/plan'
-import DrawerContent from '../components/DrawerContent'
+import { addPlan, switchPlan, updateTitle, updateTime } from '../actions/plan'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
 import SettingsIcon from '@material-ui/icons/Settings'
-import Drawer from '@material-ui/core/Drawer'
+import Drawer from '../components/Drawer'
+import Dialog from '../components/Dialog'
 
 type Props = {|
   plans: PlansState,
   addPlan: () => void,
   switchPlan: number => void,
+  updateTitle: string => void,
+  updateTime: ('start' | 'end', number) => void,
 |}
 
 type TopBarState = {|
   drawerOpen: boolean,
+  dialogOpen: boolean,
 |}
 
 const mapStateToProps = (state: State) => ({
@@ -29,7 +32,10 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ addPlan, switchPlan }, dispatch),
+  ...bindActionCreators(
+    { addPlan, switchPlan, updateTitle, updateTime },
+    dispatch
+  ),
 })
 
 export default connect(
@@ -41,6 +47,7 @@ export default connect(
       super(props)
       this.state = {
         drawerOpen: false,
+        dialogOpen: false,
       }
     }
 
@@ -48,11 +55,21 @@ export default connect(
       this.setState({ drawerOpen })
     }
 
+    toggleDialog = (dialogOpen: boolean) => () => {
+      this.setState({ dialogOpen })
+    }
+
     render() {
-      const { plans: plansState, addPlan, switchPlan } = this.props
+      const {
+        plans: plansState,
+        addPlan,
+        switchPlan,
+        updateTitle,
+        updateTime,
+      } = this.props
       const { plans, active } = plansState
       const activePlan = plans[active]
-      const { drawerOpen } = this.state
+      const { drawerOpen, dialogOpen } = this.state
 
       return (
         <div>
@@ -64,24 +81,29 @@ export default connect(
               <FlexTypography variant="title" color="inherit">
                 {activePlan.title}
               </FlexTypography>
-              <RightIconButton color="inherit">
+              <RightIconButton
+                color="inherit"
+                onClick={this.toggleDialog(true)}
+              >
                 <SettingsIcon />
               </RightIconButton>
             </Toolbar>
           </AppBarContainer>
           <Drawer
-            anchor="left"
             open={drawerOpen}
             onClose={this.toggleDrawer(false)}
-          >
-            <DrawerContent
-              titleList={plans.map(plan => plan.title)}
-              active={active}
-              addPlan={addPlan}
-              switchPlan={switchPlan}
-              closeDrawer={this.toggleDrawer(false)}
-            />
-          </Drawer>
+            titleList={plans.map(plan => plan.title)}
+            active={active}
+            addPlan={addPlan}
+            switchPlan={switchPlan}
+          />
+          <Dialog
+            open={dialogOpen}
+            onClose={this.toggleDialog(false)}
+            plan={activePlan}
+            updateTitle={updateTitle}
+            updateTime={updateTime}
+          />
         </div>
       )
     }

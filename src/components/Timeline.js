@@ -4,14 +4,14 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 
 type Props = {|
-  begin: number,
+  start: number,
   end: number,
 |}
 
 export default pure(function Timeline(props: Props) {
-  const { begin, end } = props
-  const length = end - begin
-  const timelineArray = Array.from({ length }, (_, i) => begin + i)
+  const { start, end } = props
+  const length = end - start
+  const timelineArray = Array.from({ length }, (_, i) => start + i)
 
   return (
     <div>

@@ -9,7 +9,7 @@ const initialState: PlansState = {
   plans: [
     {
       title: 'No Title',
-      begin: 8,
+      start: 8,
       end: 23,
       tasks: Array.from({ length: 30 }, () => null),
     },
@@ -40,9 +40,40 @@ const plans = (
         title: action.title,
       })
     case 'PLAN__UPDATE_TIME':
+      if (action.name === 'start') {
+        if (action.time < plan.start) {
+          return updateActivePlan(plans, {
+            ...plan,
+            start: action.time,
+            tasks: [
+              ...Array.from(
+                { length: (plan.start - action.time) * 2 },
+                () => null
+              ),
+              ...tasks,
+            ],
+          })
+        }
+        return updateActivePlan(plans, {
+          ...plan,
+          start: action.time,
+          tasks: tasks.slice((action.time - plan.start) * 2, tasks.length),
+        })
+      }
+      if (action.time < plan.end) {
+        return updateActivePlan(plans, {
+          ...plan,
+          end: action.time,
+          tasks: tasks.slice(0, tasks.length - (plan.end - action.time) * 2),
+        })
+      }
       return updateActivePlan(plans, {
         ...plan,
-        [action.name]: action.time,
+        end: action.time,
+        tasks: [
+          ...tasks,
+          ...Array.from({ length: (action.time - plan.end) * 2 }, () => null),
+        ],
       })
     case 'TASK__ADD':
       return updateActivePlanTasks(plans, [

@@ -22,7 +22,7 @@ export type SessionState = {|
 
 export type Plan = {|
   title: string,
-  begin: number,
+  start: number,
   end: number,
   tasks: Array<?Task>,
 |}

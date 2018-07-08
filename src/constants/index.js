@@ -1,5 +1,10 @@
 // @flow
 
+export const TimeRange = {
+  min: 4,
+  max: 28,
+}
+
 export const TaskPlaces = {
   TIMETABLE: 'TimeTable',
   STOCK: 'Stock',
