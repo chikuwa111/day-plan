@@ -8,3 +8,6 @@ export const newTask = (): Task => ({
   color: '#fafafa',
   length: 30,
 })
+
+export const newEmptyTasks = (length: number): Array<?Task> =>
+  Array.from({ length }, () => null)

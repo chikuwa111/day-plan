@@ -1,5 +1,5 @@
 // @flow
-import { newTask } from '../lib/task'
+import { newTask, newEmptyTasks } from '../lib/task'
 import { TaskPlaces } from '../constants'
 import type { Action } from '../actions'
 import type { PlansState, Plan, Task } from '../types'
@@ -11,7 +11,7 @@ const initialState: PlansState = {
       title: 'No Title',
       start: 8,
       end: 23,
-      tasks: Array.from({ length: 30 }, () => null),
+      tasks: newEmptyTasks(30),
     },
   ],
 }
@@ -45,13 +45,7 @@ const plans = (
           return updateActivePlan(plans, {
             ...plan,
             start: action.time,
-            tasks: [
-              ...Array.from(
-                { length: (plan.start - action.time) * 2 },
-                () => null
-              ),
-              ...tasks,
-            ],
+            tasks: [...newEmptyTasks((plan.start - action.time) * 2), ...tasks],
           })
         }
         return updateActivePlan(plans, {
@@ -70,10 +64,7 @@ const plans = (
       return updateActivePlan(plans, {
         ...plan,
         end: action.time,
-        tasks: [
-          ...tasks,
-          ...Array.from({ length: (action.time - plan.end) * 2 }, () => null),
-        ],
+        tasks: [...tasks, ...newEmptyTasks((action.time - plan.end) * 2)],
       })
     case 'TASK__ADD':
       return updateActivePlanTasks(plans, [
@@ -98,7 +89,7 @@ const plans = (
         return updateActivePlanTasks(plans, [
           ...tasks.slice(0, action.index),
           action.task,
-          ...Array.from({ length: -1 * lengthDiffSize }, () => null),
+          ...newEmptyTasks(-1 * lengthDiffSize),
           ...tasks.slice(action.index + 1),
         ])
       }
@@ -112,7 +103,7 @@ const plans = (
       const destroySize = task.length / 30
       return updateActivePlanTasks(plans, [
         ...tasks.slice(0, action.index),
-        ...Array.from({ length: destroySize }, () => null),
+        ...newEmptyTasks(destroySize),
         ...tasks.slice(action.index + 1),
       ])
     }
@@ -125,7 +116,7 @@ const plans = (
         if (action.fromIndex === action.toIndex) {
           return updateActivePlanTasks(plans, [
             ...tasks.slice(0, action.fromIndex),
-            ...Array.from({ length: action.offset }, () => null),
+            ...newEmptyTasks(action.offset),
             action.task,
             ...tasks.slice(action.toIndex + 1 + action.offset),
           ])
@@ -133,7 +124,7 @@ const plans = (
         if (action.fromIndex < action.toIndex) {
           return updateActivePlanTasks(plans, [
             ...tasks.slice(0, action.fromIndex),
-            ...Array.from({ length: taskSize }, () => null),
+            ...newEmptyTasks(taskSize),
             ...tasks.slice(action.fromIndex + 1, action.toIndex),
             action.task,
             ...tasks.slice(action.toIndex + taskSize),
@@ -144,7 +135,7 @@ const plans = (
           return updateActivePlanTasks(plans, [
             ...tasks.slice(0, action.toIndex),
             action.task,
-            ...Array.from({ length: moveSize }, () => null),
+            ...newEmptyTasks(moveSize),
             ...tasks.slice(action.fromIndex + 1),
           ])
         }
@@ -152,14 +143,14 @@ const plans = (
           ...tasks.slice(0, action.toIndex),
           action.task,
           ...tasks.slice(action.toIndex + taskSize, action.fromIndex),
-          ...Array.from({ length: taskSize }, () => null),
+          ...newEmptyTasks(taskSize),
           ...tasks.slice(action.fromIndex + 1),
         ])
       }
       if (action.from === TaskPlaces.TIMETABLE) {
         return updateActivePlanTasks(plans, [
           ...tasks.slice(0, action.fromIndex),
-          ...Array.from({ length: taskSize }, () => null),
+          ...newEmptyTasks(taskSize),
           ...tasks.slice(action.fromIndex + 1),
         ])
       }
