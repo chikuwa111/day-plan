@@ -23,7 +23,7 @@ const session = (
           index: action.index,
         },
       }
-    case 'TASKS__ADD':
+    case 'TASK__ADD':
       return {
         ...session,
         editing: {
@@ -31,7 +31,7 @@ const session = (
           index: action.index,
         },
       }
-    case 'TASKS__DESTROY':
+    case 'TASK__DESTROY':
       return initialState
     case 'STOCK__ADD':
       return {
@@ -43,7 +43,7 @@ const session = (
       }
     case 'STOCK__DESTROY':
       return initialState
-    case 'TASKS__MOVE':
+    case 'TASK__MOVE':
       return initialState
     default:
       return session

@@ -21,7 +21,7 @@ const stock = (
       ]
     case 'STOCK__DESTROY':
       return [...stock.slice(0, action.index), ...stock.slice(action.index + 1)]
-    case 'TASKS__MOVE': {
+    case 'TASK__MOVE': {
       let updatingStock = stock.slice()
       if (action.from === TaskPlaces.STOCK) {
         updatingStock = [

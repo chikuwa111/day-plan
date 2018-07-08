@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { DropTarget } from 'react-dnd'
-import { moveTask } from '../actions/tasks'
+import { moveTask } from '../actions/task'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
 
@@ -34,9 +34,12 @@ type Props = {|
   },
 |}
 
-const mapStateToProps = (state: State) => ({
-  tasks: state.tasks,
-})
+const mapStateToProps = (state: State) => {
+  const plan = state.plans.plans[state.plans.active]
+  return {
+    tasks: plan.tasks,
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators({ moveTask }, dispatch),

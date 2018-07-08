@@ -6,7 +6,7 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
-import { addTask, updateTask, destroyTask } from '../actions/tasks'
+import { addTask, updateTask, destroyTask } from '../actions/task'
 import { changeEditing } from '../actions/session'
 import Grid from '@material-ui/core/Grid'
 import Timeline from '../components/Timeline'
@@ -25,15 +25,18 @@ type Props = {|
   changeEditing: (TaskPlace, number) => void,
 |}
 
-const mapStateToProps = (state: State) => ({
-  begin: state.setting.begin,
-  end: state.setting.end,
-  tasks: state.tasks,
-  editingIndex:
-    state.session.editing.place === TaskPlaces.TIMETABLE
-      ? state.session.editing.index
-      : null,
-})
+const mapStateToProps = (state: State) => {
+  const plan = state.plans.plans[state.plans.active]
+  return {
+    begin: plan.begin,
+    end: plan.end,
+    tasks: plan.tasks,
+    editingIndex:
+      state.session.editing.place === TaskPlaces.TIMETABLE
+        ? state.session.editing.index
+        : null,
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(
