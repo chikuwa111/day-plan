@@ -133,7 +133,8 @@ export default class EditingTask extends React.PureComponent<Props, State> {
 
 const Container = styled(Card)`
   && {
-    width: 100%;
+    width: 98%;
+    padding-left: 2%;
     height: ${props => props.task.length / 15}rem;
     background-color: ${props => props.task.color};
     font-size: ${props => 0.8 + props.task.length / 150}rem;
