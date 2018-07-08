@@ -129,9 +129,14 @@ export default connect(
 )
 
 const Container = styled.div`
-  width: 100%;
+  width: 98%;
   height: 100%;
+  padding-right: 2%;
   overflow: auto;
+  @media (min-width: 600px) {
+    width: 100%;
+    padding-right: 0;
+  }
 `
 
 const GridWrapper = styled(Grid)`

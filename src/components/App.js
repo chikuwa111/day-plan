@@ -7,6 +7,8 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import TouchBackend from 'react-dnd-touch-backend'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
+import Hidden from '@material-ui/core/Hidden'
+import TopBar from '../components/TopBar'
 import TimeTable from '../containers/TimeTable'
 import Stock from '../containers/Stock'
 
@@ -25,21 +27,37 @@ export default DragDropContext(Backend)(
     return (
       <React.Fragment>
         <CssBaseline />
-        <GridWrapper container spacing={16}>
-          <GridWrapper item xs={12} md={8}>
+        <TopBar />
+        <RootGrid container spacing={16}>
+          <GridWrapper item xs={12} sm={8}>
             <TimeTable />
           </GridWrapper>
-          <GridWrapper item xs={12} md={4}>
-            <Stock />
-          </GridWrapper>
-        </GridWrapper>
+          <Hidden xsDown>
+            <GridWrapper item xs={12} sm={4}>
+              <MarginDiv />
+              <Stock />
+            </GridWrapper>
+          </Hidden>
+        </RootGrid>
       </React.Fragment>
     )
   })
 )
 
+const RootGrid = styled(Grid)`
+  height: 100%;
+  padding-top: 56px;
+  @media (min-width: 600px) {
+    padding-top: 64px;
+  }
+`
+
 const GridWrapper = styled(Grid)`
   && {
     height: 100%;
   }
+`
+
+const MarginDiv = styled.div`
+  height: 0.8rem;
 `
