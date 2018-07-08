@@ -29,6 +29,18 @@ const plans = (
         active: 0,
         plans: [...initialState.plans, ...plans.plans],
       }
+    case 'PLAN__DESTROY':
+      if (plans.plans.length === 1) {
+        return initialState
+      }
+      return {
+        ...plans,
+        active: 0,
+        plans: [
+          ...plans.plans.slice(0, plans.active),
+          ...plans.plans.slice(plans.active + 1),
+        ],
+      }
     case 'PLAN__SWITCH':
       return {
         ...plans,

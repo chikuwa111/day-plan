@@ -1,5 +1,6 @@
 // @flow
 type AddAction = { type: 'PLAN__ADD' }
+type DestroyAction = { type: 'PLAN__DESTROY' }
 type SwitchAction = { type: 'PLAN__SWITCH', index: number }
 type UpdateTitleAction = { type: 'PLAN__UPDATE_TITLE', title: string }
 type UpdateTimeAction = {
@@ -10,12 +11,17 @@ type UpdateTimeAction = {
 
 export type PlanAction =
   | AddAction
+  | DestroyAction
   | SwitchAction
   | UpdateTitleAction
   | UpdateTimeAction
 
 export const addPlan = () => ({
   type: 'PLAN__ADD',
+})
+
+export const destroyPlan = () => ({
+  type: 'PLAN__DESTROY',
 })
 
 export const switchPlan = (index: number) => ({

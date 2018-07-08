@@ -4,7 +4,13 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import type { State, PlansState } from '../types'
-import { addPlan, switchPlan, updateTitle, updateTime } from '../actions/plan'
+import {
+  addPlan,
+  destroyPlan,
+  switchPlan,
+  updateTitle,
+  updateTime,
+} from '../actions/plan'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
@@ -17,6 +23,7 @@ import Dialog from '../components/Dialog'
 type Props = {|
   plans: PlansState,
   addPlan: () => void,
+  destroyPlan: () => void,
   switchPlan: number => void,
   updateTitle: string => void,
   updateTime: ('start' | 'end', number) => void,
@@ -33,7 +40,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(
-    { addPlan, switchPlan, updateTitle, updateTime },
+    { addPlan, destroyPlan, switchPlan, updateTitle, updateTime },
     dispatch
   ),
 })
@@ -63,6 +70,7 @@ export default connect(
       const {
         plans: plansState,
         addPlan,
+        destroyPlan,
         switchPlan,
         updateTitle,
         updateTime,
@@ -95,6 +103,7 @@ export default connect(
             titleList={plans.map(plan => plan.title)}
             active={active}
             addPlan={addPlan}
+            destroyPlan={destroyPlan}
             switchPlan={switchPlan}
           />
           <Dialog
