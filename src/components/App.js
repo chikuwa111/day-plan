@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import TouchBackend from 'react-dnd-touch-backend'
+import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
 import TimeTable from '../containers/TimeTable'
 import Stock from '../containers/Stock'
@@ -22,14 +23,17 @@ const Backend = isMobile ? TouchBackend : HTML5Backend
 export default DragDropContext(Backend)(
   pure(function App() {
     return (
-      <GridWrapper container spacing={16}>
-        <GridWrapper item xs={12} md={8}>
-          <TimeTable />
+      <React.Fragment>
+        <CssBaseline />
+        <GridWrapper container spacing={16}>
+          <GridWrapper item xs={12} md={8}>
+            <TimeTable />
+          </GridWrapper>
+          <GridWrapper item xs={12} md={4}>
+            <Stock />
+          </GridWrapper>
         </GridWrapper>
-        <GridWrapper item xs={12} md={4}>
-          <Stock />
-        </GridWrapper>
-      </GridWrapper>
+      </React.Fragment>
     )
   })
 )

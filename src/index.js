@@ -1,4 +1,5 @@
 // @flow
+import 'typeface-roboto'
 import * as React from 'react'
 import { render } from 'react-dom'
 import { applyMiddleware, createStore } from 'redux'
@@ -22,6 +23,7 @@ if (root instanceof Element) {
   const persistedReducer = persistReducer(persistConfig, reducer)
   const store = createStore(persistedReducer, applyMiddleware(logger))
   const persistor = persistStore(store)
+
   render(
     <Provider store={store}>
       <PersistGate loading={<CircularProgress />} persistor={persistor}>
