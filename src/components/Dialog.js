@@ -4,7 +4,7 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 import type { Plan } from '../types'
 import { TimeRange } from '../constants'
-import Dialog from '@material-ui/core/Dialog'
+import DialogComp from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import TextField from '@material-ui/core/TextField'
@@ -31,7 +31,7 @@ export default pure(function Dialog(props: Props) {
   const disablePlusEnd = TimeRange.max <= end
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <DialogComp open={open} onClose={onClose}>
       <DialogTitle>Edit Settings</DialogTitle>
       <DialogContent>
         <TextField
@@ -58,7 +58,7 @@ export default pure(function Dialog(props: Props) {
           disablePlus={disablePlusEnd}
         />
       </DialogContent>
-    </Dialog>
+    </DialogComp>
   )
 })
 

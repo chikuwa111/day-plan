@@ -2,7 +2,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import pure from 'recompose/pure'
-import Drawer from '@material-ui/core/Drawer'
+import DrawerComp from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItem from '@material-ui/core/ListItem'
@@ -20,11 +20,11 @@ type Props = {|
   switchPlan: number => void,
 |}
 
-export default pure(function DrawerContent(props: Props) {
+export default pure(function Drawer(props: Props) {
   const { open, onClose, titleList, active, addPlan, switchPlan } = props
 
   return (
-    <Drawer anchor="left" open={open} onClose={onClose}>
+    <DrawerComp anchor="left" open={open} onClose={onClose}>
       <Container onClick={onClose}>
         <List>
           <ListItem button onClick={addPlan}>
@@ -56,7 +56,7 @@ export default pure(function DrawerContent(props: Props) {
           )}
         </List>
       </Container>
-    </Drawer>
+    </DrawerComp>
   )
 })
 
