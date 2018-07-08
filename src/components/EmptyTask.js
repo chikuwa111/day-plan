@@ -33,8 +33,8 @@ const Container = styled.div`
 `
 
 const Wrapper = styled.div`
-  width: 99%;
-  height: 1.9rem;
+  width: 100%;
+  height: 2rem;
   opacity: 0.5;
   border-top: 0.05rem dashed lightgray;
   border-right: 0.1rem dashed lightgray;

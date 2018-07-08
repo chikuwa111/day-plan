@@ -129,13 +129,12 @@ export default connect(
 )
 
 const Container = styled.div`
-  width: 98%;
+  width: 100%;
   height: 100%;
   padding-right: 2%;
   overflow: auto;
   @media (min-width: 600px) {
-    width: 100%;
-    padding-right: 0;
+    padding-right: 1%;
   }
 `
 
