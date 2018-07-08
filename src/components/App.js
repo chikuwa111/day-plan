@@ -8,7 +8,7 @@ import TouchBackend from 'react-dnd-touch-backend'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
-import TopBar from './TopBar'
+import TopBar from '../containers/TopBar'
 import TimeTable from '../containers/TimeTable'
 import Stock from '../containers/Stock'
 
