@@ -19,9 +19,9 @@ export default pure(function TopBar() {
         <FlexTypography variant="title" color="inherit">
           Title
         </FlexTypography>
-        <IconButton color="inherit">
+        <RightIconButton color="inherit">
           <SettingsIcon />
-        </IconButton>
+        </RightIconButton>
       </Toolbar>
     </AppBarContainer>
   )
@@ -35,6 +35,12 @@ const LeftIconButton = styled(IconButton)`
   && {
     margin-left: -12px;
     margin-right: 20px;
+  }
+`
+
+const RightIconButton = styled(IconButton)`
+  && {
+    margin-right: -12px;
   }
 `
 
