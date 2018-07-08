@@ -1,5 +1,5 @@
 // @flow
-import { newTask } from '../lib/task'
+import { newTask } from '../lib/util'
 import { TaskPlaces } from '../constants'
 import type { Action } from '../actions'
 import type { StockState } from '../types'

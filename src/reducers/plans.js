@@ -1,5 +1,5 @@
 // @flow
-import { newTask, newEmptyTasks } from '../lib/task'
+import { newTask, newEmptyTasks, getTodayStr } from '../lib/util'
 import { TaskPlaces } from '../constants'
 import type { Action } from '../actions'
 import type { PlansState, Plan, Task } from '../types'
@@ -8,7 +8,7 @@ const initialState: PlansState = {
   active: 0,
   plans: [
     {
-      title: 'No Title',
+      title: getTodayStr(),
       start: 8,
       end: 23,
       tasks: newEmptyTasks(30),
