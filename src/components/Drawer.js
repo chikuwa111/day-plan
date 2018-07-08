@@ -10,6 +10,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import AddBoxIcon from '@material-ui/icons/AddBox'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
+import Typography from '@material-ui/core/Typography'
 
 type Props = {|
   open: boolean,
@@ -50,7 +51,10 @@ export default pure(function Drawer(props: Props) {
                   <ListItemIcon>
                     <BookmarkIcon />
                   </ListItemIcon>
-                  <ListItemText primary={truncate(title)} />
+                  <ListItemText
+                    disableTypography
+                    primary={<EllipsisTypography>{title}</EllipsisTypography>}
+                  />
                 </ListItem>
               )
           )}
@@ -64,8 +68,8 @@ const Container = styled.div`
   width: 250px;
 `
 
-const truncate = (title: string) => {
-  const size = 15
-  if (title.length < size) return title
-  return title.substring(0, size - 3) + ' ...'
-}
+const EllipsisTypography = styled(Typography)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
