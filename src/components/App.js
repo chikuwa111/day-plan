@@ -71,5 +71,5 @@ const GridWrapper = styled(Grid)`
 `
 
 const MarginDiv = styled.div`
-  height: 0.8rem;
+  height: 1.6rem;
 `

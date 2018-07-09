@@ -63,6 +63,7 @@ export default connect(
 
     return (
       <Container>
+        <MarginDiv />
         <GridWrapper container>
           <Grid
             item
@@ -135,7 +136,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   padding-right: 2%;
-  overflow: auto;
+  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   @media (min-width: 600px) {
     padding-right: 1%;
