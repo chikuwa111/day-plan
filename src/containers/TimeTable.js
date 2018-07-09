@@ -136,6 +136,7 @@ const Container = styled.div`
   height: 100%;
   padding-right: 2%;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   @media (min-width: 600px) {
     padding-right: 1%;
   }
