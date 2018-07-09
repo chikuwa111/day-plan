@@ -20,7 +20,10 @@ if (root instanceof Element) {
     blacklist: ['session'],
   }
   const persistedReducer = persistReducer(persistConfig, reducer)
-  const store = createStore(persistedReducer, applyMiddleware(logger))
+  const store =
+    process.env.NODE_ENV === 'production'
+      ? createStore(persistedReducer)
+      : createStore(persistedReducer, applyMiddleware(logger))
   const persistor = persistStore(store)
 
   render(
