@@ -1,5 +1,4 @@
 // @flow
-import 'typeface-roboto'
 import * as React from 'react'
 import { render } from 'react-dom'
 import { applyMiddleware, createStore } from 'redux'
