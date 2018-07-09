@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import TouchBackend from 'react-dnd-touch-backend'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import blueGrey from '@material-ui/core/colors/blueGrey'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
@@ -19,13 +21,23 @@ const isMobile = (() => {
   if (userAgent.indexOf('android') !== -1) return true
   return false
 })()
-
 const Backend = isMobile ? TouchBackend : HTML5Backend
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: blueGrey[300],
+      main: blueGrey[600],
+      dark: blueGrey[900],
+      contrastText: '#fff',
+    },
+  },
+})
 
 export default DragDropContext(Backend)(
   pure(function App() {
     return (
-      <React.Fragment>
+      <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <TopBar />
         <RootGrid container spacing={16}>
@@ -39,7 +51,7 @@ export default DragDropContext(Backend)(
             </GridWrapper>
           </Hidden>
         </RootGrid>
-      </React.Fragment>
+      </MuiThemeProvider>
     )
   })
 )
