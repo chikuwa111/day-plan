@@ -17,6 +17,7 @@ type Props = {|
   maxLength: ?number,
   onChange: Task => void,
   onDestroy: () => void,
+  closeEditing: () => void,
 |}
 
 type State = {|
@@ -48,7 +49,7 @@ export default class EditingTask extends React.PureComponent<Props, State> {
 
   render() {
     const { menuType, menuElement } = this.state
-    const { task, maxLength, onChange, onDestroy } = this.props
+    const { task, maxLength, onChange, onDestroy, closeEditing } = this.props
 
     const availableLengths =
       maxLength == null
@@ -57,16 +58,23 @@ export default class EditingTask extends React.PureComponent<Props, State> {
 
     return (
       <Container task={task}>
-        <BodyField
-          autoFocus
-          value={task.body}
-          onChange={e => {
-            onChange({
-              ...task,
-              body: e.target.value,
-            })
+        <form
+          onSubmit={e => {
+            closeEditing()
+            e.preventDefault()
           }}
-        />
+        >
+          <BodyField
+            autoFocus
+            value={task.body}
+            onChange={e => {
+              onChange({
+                ...task,
+                body: e.target.value,
+              })
+            }}
+          />
+        </form>
         <IconButton
           onClick={e => {
             this.openMenu(e.currentTarget, 'length')

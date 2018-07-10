@@ -61,18 +61,15 @@ export default connect(
       changeEditing,
     } = props
 
+    const closeEditing = () => {
+      changeEditing(null, -1)
+    }
+
     return (
       <Container>
         <MarginDiv />
         <GridWrapper container>
-          <Grid
-            item
-            xs={2}
-            sm={1}
-            onClick={() => {
-              changeEditing(null, 999)
-            }}
-          >
+          <Grid item xs={2} sm={1} onClick={closeEditing}>
             <Timeline start={start} end={end} />
           </Grid>
           <Grid item xs={10} sm={11}>
@@ -94,7 +91,7 @@ export default connect(
                 tasks.slice(index + 1).every(behindTask => {
                   if (behindTask == null) {
                     maxLength += 30
-                    return true
+                    return maxLength < 120
                   }
                   return false
                 })
@@ -109,6 +106,7 @@ export default connect(
                     onDestroy={() => {
                       destroyTask(index)
                     }}
+                    closeEditing={closeEditing}
                   />
                 )
               } else {

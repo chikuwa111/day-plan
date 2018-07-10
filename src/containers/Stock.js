@@ -68,6 +68,9 @@ export default connect(
                   onDestroy={() => {
                     destroyStock(index)
                   }}
+                  closeEditing={() => {
+                    changeEditing(null, -1)
+                  }}
                 />
               ) : (
                 <TaskComp
