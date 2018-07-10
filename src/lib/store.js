@@ -3,7 +3,7 @@ import { applyMiddleware, createStore } from 'redux'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import reducers from '../reducers'
-import gaMiddleware from '../lib/redux-beacon'
+import gaMiddleware from '../lib/gaMiddleware'
 
 const persistConfig = {
   key: 'root',

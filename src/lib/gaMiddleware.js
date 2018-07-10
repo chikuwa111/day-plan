@@ -33,7 +33,7 @@ const eventsMap = {
   TASK__MOVE: trackEvent(action => ({
     category: 'TASK',
     action: 'MOVE',
-    value: `${action.from} => ${action.to}`,
+    label: `${action.from} => ${action.to}`,
   })),
 }
 
