@@ -13,8 +13,8 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducers)
 
 let middleware = [gaMiddleware]
-if (process.env.NODE_ENV === 'production') {
-  const logger = require('redux-logger')
+if (process.env.NODE_ENV !== 'production') {
+  const logger = require('redux-logger').default
   middleware = [...middleware, logger]
 }
 
