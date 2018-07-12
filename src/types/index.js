@@ -7,8 +7,8 @@ export type State = {
 }
 
 export type PlansState = {|
-  active: number,
-  plans: Array<Plan>,
+  active: string,
+  plans: { [id: string]: Plan },
 |}
 
 export type StockState = Array<Task>

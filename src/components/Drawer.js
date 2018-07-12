@@ -2,6 +2,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import pure from 'recompose/pure'
+import type { Plan } from '../types'
 import DrawerComp from '@material-ui/core/Drawer'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
@@ -17,18 +18,18 @@ import Typography from '@material-ui/core/Typography'
 type Props = {|
   open: boolean,
   onClose: () => void,
-  titleList: Array<string>,
-  active: number,
+  plans: { [id: string]: Plan },
+  active: string,
   addPlan: () => void,
   destroyPlan: () => void,
-  switchPlan: number => void,
+  switchPlan: string => void,
 |}
 
 export default pure(function Drawer(props: Props) {
   const {
     open,
     onClose,
-    titleList,
+    plans,
     active,
     addPlan,
     destroyPlan,
@@ -62,14 +63,14 @@ export default pure(function Drawer(props: Props) {
         <List
           subheader={<ListSubheader component="div">Other plans</ListSubheader>}
         >
-          {titleList.map(
-            (title, index) =>
-              index !== active && (
+          {Object.keys(plans).map(
+            id =>
+              id !== active && (
                 <ListItem
                   button
-                  key={index}
+                  key={id}
                   onClick={() => {
-                    switchPlan(index)
+                    switchPlan(id)
                   }}
                 >
                   <ListItemIcon>
@@ -77,7 +78,9 @@ export default pure(function Drawer(props: Props) {
                   </ListItemIcon>
                   <ListItemText
                     disableTypography
-                    primary={<EllipsisTypography>{title}</EllipsisTypography>}
+                    primary={
+                      <EllipsisTypography>{plans[id].title}</EllipsisTypography>
+                    }
                   />
                 </ListItem>
               )

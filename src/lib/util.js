@@ -1,6 +1,6 @@
 // @flow
 import uuid from 'uuid/v4'
-import type { Task } from '../types'
+import type { Plan, Task } from '../types'
 
 export const newTask = (): Task => ({
   id: uuid(),
@@ -11,6 +11,13 @@ export const newTask = (): Task => ({
 
 export const newEmptyTasks = (length: number): Array<?Task> =>
   Array.from({ length }, () => null)
+
+export const newPlan = (): Plan => ({
+  title: getTodayStr(),
+  start: 8,
+  end: 23,
+  tasks: newEmptyTasks(30),
+})
 
 export const getTodayStr = (): string => {
   const today = new Date()

@@ -24,7 +24,7 @@ type Props = {|
   plans: PlansState,
   addPlan: () => void,
   destroyPlan: () => void,
-  switchPlan: number => void,
+  switchPlan: string => void,
   updateTitle: string => void,
   updateTime: ('start' | 'end', number) => void,
 |}
@@ -100,7 +100,7 @@ export default connect(
           <Drawer
             open={drawerOpen}
             onClose={this.toggleDrawer(false)}
-            titleList={plans.map(plan => plan.title)}
+            plans={plans}
             active={active}
             addPlan={addPlan}
             destroyPlan={destroyPlan}

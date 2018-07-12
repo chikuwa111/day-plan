@@ -1,50 +1,50 @@
 // @flow
-import { newTask, newEmptyTasks, getTodayStr } from '../lib/util'
+import uuid from 'uuid/v4'
+import { newTask, newEmptyTasks, newPlan } from '../lib/util'
 import { TaskPlaces } from '../constants'
 import type { Action } from '../actions'
 import type { PlansState, Plan, Task } from '../types'
 
-const initialState: PlansState = {
-  active: 0,
-  plans: [
-    {
-      title: getTodayStr(),
-      start: 8,
-      end: 23,
-      tasks: newEmptyTasks(30),
+const initialState: () => PlansState = () => {
+  const id = uuid()
+  return {
+    active: id,
+    plans: {
+      [id]: newPlan(),
     },
-  ],
+  }
 }
 
 const plans = (
-  plans: PlansState = initialState,
+  plans: PlansState = initialState(),
   action: Action
 ): PlansState => {
   const plan = plans.plans[plans.active]
   const tasks = plan.tasks
   switch (action.type) {
-    case 'PLAN__ADD':
+    case 'PLAN__ADD': {
+      const id = uuid()
       return {
         ...plans,
-        active: 0,
-        plans: [...initialState.plans, ...plans.plans],
+        active: id,
+        plans: { ...plans.plans, [id]: newPlan() },
       }
-    case 'PLAN__DESTROY':
-      if (plans.plans.length === 1) {
-        return initialState
+    }
+    case 'PLAN__DESTROY': {
+      if (Object.keys(plans.plans).length === 1) {
+        return initialState()
       }
+      const { [plans.active]: deletingPlan, ...withoutDeleting } = plans.plans
       return {
         ...plans,
-        active: 0,
-        plans: [
-          ...plans.plans.slice(0, plans.active),
-          ...plans.plans.slice(plans.active + 1),
-        ],
+        active: Object.keys(withoutDeleting)[0],
+        plans: withoutDeleting,
       }
+    }
     case 'PLAN__SWITCH':
       return {
         ...plans,
-        active: action.index,
+        active: action.id,
       }
     case 'PLAN__UPDATE_TITLE':
       return updateActivePlan(plans, {
@@ -184,11 +184,10 @@ export default plans
 
 const updateActivePlan = (plans: PlansState, plan: Plan): PlansState => ({
   ...plans,
-  plans: [
-    ...plans.plans.slice(0, plans.active),
-    plan,
-    ...plans.plans.slice(plans.active + 1),
-  ],
+  plans: {
+    ...plans.plans,
+    [plans.active]: plan,
+  },
 })
 
 const updateActivePlanTasks = (
@@ -196,12 +195,11 @@ const updateActivePlanTasks = (
   tasks: Array<?Task>
 ): PlansState => ({
   ...plans,
-  plans: [
-    ...plans.plans.slice(0, plans.active),
-    {
+  plans: {
+    ...plans.plans,
+    [plans.active]: {
       ...plans.plans[plans.active],
       tasks: tasks,
     },
-    ...plans.plans.slice(plans.active + 1),
-  ],
+  },
 })
