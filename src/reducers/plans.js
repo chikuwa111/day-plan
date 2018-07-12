@@ -1,12 +1,12 @@
 // @flow
-import uuid from 'uuid/v4'
+import nanoid from 'nanoid'
 import { newTask, newEmptyTasks, newPlan } from '../lib/util'
 import { TaskPlaces } from '../constants'
 import type { Action } from '../actions'
 import type { PlansState, Plan, Task } from '../types'
 
 const initialState: () => PlansState = () => {
-  const id = uuid()
+  const id = nanoid(7)
   return {
     active: id,
     plans: {
@@ -23,7 +23,7 @@ const plans = (
   const tasks = plan.tasks
   switch (action.type) {
     case 'PLAN__ADD': {
-      const id = uuid()
+      const id = nanoid(7)
       return {
         ...plans,
         active: id,

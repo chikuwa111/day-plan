@@ -1,9 +1,9 @@
 // @flow
-import uuid from 'uuid/v4'
+import nanoid from 'nanoid'
 import type { Plan, Task } from '../types'
 
 export const newTask = (): Task => ({
-  id: uuid(),
+  id: nanoid(7),
   body: '',
   color: '#fafafa',
   length: 30,
