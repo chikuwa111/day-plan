@@ -26,12 +26,29 @@ type State = {|
 |}
 
 export default class EditingTask extends React.PureComponent<Props, State> {
+  container: ?HTMLElement
+
   constructor(props: Props) {
     super(props)
     this.state = {
       menuType: '',
       menuElement: null,
     }
+  }
+
+  handleClick = (e: MouseEvent | TouchEvent) => {
+    const target: any = e.target // container.contains(e.target)だとflowが落ちるためcast
+    const container = this.container
+    if (container && !container.contains(target)) this.props.closeEditing()
+  }
+
+  componentDidMount() {
+    document.addEventListener('touchend', this.handleClick, true)
+    document.addEventListener('click', this.handleClick, true)
+  }
+  componentWillUnmount() {
+    document.removeEventListener('touchend', this.handleClick, true)
+    document.removeEventListener('click', this.handleClick, true)
   }
 
   openMenu = (el: HTMLElement, type: 'color' | 'length') => {
@@ -57,82 +74,84 @@ export default class EditingTask extends React.PureComponent<Props, State> {
         : TimeLengths.filter(length => length <= maxLength)
 
     return (
-      <Container task={task}>
-        <BodyField
-          autoFocus
-          value={task.body}
-          onChange={e => {
-            onChange({
-              ...task,
-              body: e.target.value,
-            })
-          }}
-          onKeyDown={e => {
-            if (e.keyCode === 13) {
-              closeEditing()
-            }
-          }}
-        />
-        <IconButton
-          onClick={e => {
-            this.openMenu(e.currentTarget, 'length')
-          }}
-        >
-          <ScheduleIcon />
-        </IconButton>
-        <Menu
-          open={menuType === 'length'}
-          anchorEl={menuElement}
-          onClose={this.closeMenu}
-        >
-          {availableLengths.map(length => (
-            <MenuItem
-              key={length}
-              selected={task.length === length}
-              onClick={() => {
-                onChange({
-                  ...task,
-                  length,
-                })
-                this.closeMenu()
-              }}
-            >
-              {length}
-            </MenuItem>
-          ))}
-        </Menu>
-        <IconButton
-          onClick={e => {
-            this.openMenu(e.currentTarget, 'color')
-          }}
-        >
-          <ColorLensIcon />
-        </IconButton>
-        <Menu
-          open={menuType === 'color'}
-          anchorEl={menuElement}
-          onClose={this.closeMenu}
-        >
-          {Colors.map(color => (
-            <ColorMenuItem
-              color={color}
-              key={color}
-              onClick={() => {
-                onChange({
-                  ...task,
-                  color,
-                })
-                this.closeMenu()
-              }}
-            >
-              {task.color === color && '✔︎'}
-            </ColorMenuItem>
-          ))}
-        </Menu>
-        <IconButton>
-          <DeleteIcon onClick={onDestroy} />
-        </IconButton>
-      </Container>
+      <div ref={container => (this.container = container)}>
+        <Container task={task}>
+          <BodyField
+            autoFocus
+            value={task.body}
+            onChange={e => {
+              onChange({
+                ...task,
+                body: e.target.value,
+              })
+            }}
+            onKeyDown={e => {
+              if (e.keyCode === 13) {
+                closeEditing()
+              }
+            }}
+          />
+          <IconButton
+            onClick={e => {
+              this.openMenu(e.currentTarget, 'length')
+            }}
+          >
+            <ScheduleIcon />
+          </IconButton>
+          <Menu
+            open={menuType === 'length'}
+            anchorEl={menuElement}
+            onClose={this.closeMenu}
+          >
+            {availableLengths.map(length => (
+              <MenuItem
+                key={length}
+                selected={task.length === length}
+                onClick={() => {
+                  onChange({
+                    ...task,
+                    length,
+                  })
+                  this.closeMenu()
+                }}
+              >
+                {length}
+              </MenuItem>
+            ))}
+          </Menu>
+          <IconButton
+            onClick={e => {
+              this.openMenu(e.currentTarget, 'color')
+            }}
+          >
+            <ColorLensIcon />
+          </IconButton>
+          <Menu
+            open={menuType === 'color'}
+            anchorEl={menuElement}
+            onClose={this.closeMenu}
+          >
+            {Colors.map(color => (
+              <ColorMenuItem
+                color={color}
+                key={color}
+                onClick={() => {
+                  onChange({
+                    ...task,
+                    color,
+                  })
+                  this.closeMenu()
+                }}
+              >
+                {task.color === color && '✔︎'}
+              </ColorMenuItem>
+            ))}
+          </Menu>
+          <IconButton>
+            <DeleteIcon onClick={onDestroy} />
+          </IconButton>
+        </Container>
+      </div>
     )
   }
 }

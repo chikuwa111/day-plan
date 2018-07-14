@@ -61,20 +61,16 @@ export default connect(
       changeEditing,
     } = props
 
-    const closeEditing = () => {
-      changeEditing(null, -1)
-    }
-
     return (
       <Container>
         <MarginDiv />
         <GridWrapper container>
-          <Grid item xs={2} sm={1} onClick={closeEditing}>
+          <Grid item xs={2} sm={1}>
             <Timeline start={start} end={end} />
           </Grid>
           <Grid item xs={10} sm={11}>
             <MarginDiv />
-            {tasks.map((task, index) => {
+            {tasks.map((task, index, tasks) => {
               if (task == null) {
                 return (
                   <EmptyTask
@@ -106,7 +102,9 @@ export default connect(
                     onDestroy={() => {
                       destroyTask(index)
                     }}
-                    closeEditing={closeEditing}
+                    closeEditing={() => {
+                      changeEditing(null, -1)
+                    }}
                   />
                 )
               } else {
