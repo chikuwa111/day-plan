@@ -5,8 +5,7 @@ import type { Task } from '../types'
 import { Colors, TimeLengths } from '../constants'
 import Card from '@material-ui/core/Card'
 import TextField from '@material-ui/core/TextField'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
+import Icon from '@material-ui/core/Icon'
 import IconButton from '@material-ui/core/IconButton'
 import ScheduleIcon from '@material-ui/icons/Schedule'
 import ColorLensIcon from '@material-ui/icons/ColorLens'
@@ -20,24 +19,12 @@ type Props = {|
   closeEditing: () => void,
 |}
 
-type State = {|
-  menuType: 'color' | 'length' | '',
-  menuElement: ?HTMLElement,
-|}
-
-export default class EditingTask extends React.PureComponent<Props, State> {
+export default class EditingTask extends React.PureComponent<Props> {
   container: ?HTMLElement
 
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      menuType: '',
-      menuElement: null,
-    }
-  }
-
   handleClick = (e: MouseEvent | TouchEvent) => {
-    const target: any = e.target // container.contains(e.target)だとflowが落ちるためcast
+    // FIXME flow
+    const target: any = e.target
     const container = this.container
     if (container && !container.contains(target)) this.props.closeEditing()
   }
@@ -51,21 +38,7 @@ export default class EditingTask extends React.PureComponent<Props, State> {
     document.removeEventListener('click', this.handleClick, true)
   }
 
-  openMenu = (el: HTMLElement, type: 'color' | 'length') => {
-    this.setState({
-      menuType: type,
-      menuElement: el,
-    })
-  }
-  closeMenu = () => {
-    this.setState({
-      menuType: '',
-      menuElement: null,
-    })
-  }
-
   render() {
-    const { menuType, menuElement } = this.state
     const { task, maxLength, onChange, onDestroy, closeEditing } = this.props
 
     const availableLengths =
@@ -91,62 +64,40 @@ export default class EditingTask extends React.PureComponent<Props, State> {
               }
             }}
           />
-          <IconButton
-            onClick={e => {
-              this.openMenu(e.currentTarget, 'length')
-            }}
-          >
-            <ScheduleIcon />
-          </IconButton>
-          <Menu
-            open={menuType === 'length'}
-            anchorEl={menuElement}
-            onClose={this.closeMenu}
-          >
-            {availableLengths.map(length => (
-              <MenuItem
-                key={length}
-                selected={task.length === length}
-                onClick={() => {
-                  onChange({
-                    ...task,
-                    length,
-                  })
-                  this.closeMenu()
-                }}
-              >
-                {length}
-              </MenuItem>
-            ))}
-          </Menu>
-          <IconButton
-            onClick={e => {
-              this.openMenu(e.currentTarget, 'color')
-            }}
-          >
-            <ColorLensIcon />
-          </IconButton>
-          <Menu
-            open={menuType === 'color'}
-            anchorEl={menuElement}
-            onClose={this.closeMenu}
-          >
-            {Colors.map(color => (
-              <ColorMenuItem
-                color={color}
-                key={color}
-                onClick={() => {
-                  onChange({
-                    ...task,
-                    color,
-                  })
-                  this.closeMenu()
-                }}
-              >
-                {task.color === color && '✔︎'}
-              </ColorMenuItem>
-            ))}
-          </Menu>
+          <SelectWrapper>
+            <SelectIcon>
+              <ScheduleIcon />
+            </SelectIcon>
+            <Select
+              value={task.length}
+              onChange={e => {
+                onChange({ ...task, length: Number(e.target.value) })
+              }}
+            >
+              {availableLengths.map(length => (
+                <option key={length} value={length}>
+                  {length} min
+                </option>
+              ))}
+            </Select>
+          </SelectWrapper>
+          <SelectWrapper>
+            <SelectIcon>
+              <ColorLensIcon />
+            </SelectIcon>
+            <Select
+              value={task.color}
+              onChange={e => {
+                onChange({ ...task, color: e.target.value })
+              }}
+            >
+              {Colors.map(([name, color]) => (
+                <option key={name} value={color}>
+                  {name}
+                </option>
+              ))}
+            </Select>
+          </SelectWrapper>
           <IconButton>
             <DeleteIcon onClick={onDestroy} />
           </IconButton>
@@ -174,11 +125,31 @@ const BodyField = styled(TextField)`
   }
 `
 
-const ColorMenuItem = styled(MenuItem)`
+const SelectWrapper = styled.div`
+  position: relative;
+`
+
+const SelectIcon = styled(Icon)`
   && {
-    background-color: ${props => props.color};
-    &:hover {
-      background-color: ${props => props.color};
-    }
+    width: 48px;
+    height: 48px;
+    font-size: 48px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
   }
+`
+
+const Select = styled.select`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  appearance: none;
+  color: transparent;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
 `

@@ -11,10 +11,10 @@ export const TaskPlaces = {
 }
 
 export const Colors = [
-  '#fafafa', // white
-  '#ffd180', // orange
-  '#80d8ff', // blue
-  '#ccff90', // grean
+  ['white', '#fafafa'],
+  ['orange', '#ffd180'],
+  ['blue', '#80d8ff'],
+  ['green', '#ccff90'],
 ]
 
 export const TimeLengths = [30, 60, 90, 120]
