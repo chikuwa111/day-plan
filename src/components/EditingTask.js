@@ -47,7 +47,13 @@ export default class EditingTask extends React.PureComponent<Props> {
         : TimeLengths.filter(length => length <= maxLength)
 
     return (
-      <div ref={container => (this.container = container)}>
+      <form
+        ref={container => (this.container = container)}
+        onSubmit={e => {
+          e.preventDefault()
+          closeEditing()
+        }}
+      >
         <Container task={task}>
           <BodyField
             autoFocus
@@ -57,11 +63,6 @@ export default class EditingTask extends React.PureComponent<Props> {
                 ...task,
                 body: e.target.value,
               })
-            }}
-            onKeyDown={e => {
-              if (e.keyCode === 13) {
-                closeEditing()
-              }
             }}
           />
           <SelectWrapper>
@@ -102,7 +103,8 @@ export default class EditingTask extends React.PureComponent<Props> {
             <DeleteIcon onClick={onDestroy} />
           </IconButton>
         </Container>
-      </div>
+        <HiddenButton type="submit" />
+      </form>
     )
   }
 }
@@ -152,4 +154,9 @@ const Select = styled.select`
   border: 0;
   border-radius: 0;
   cursor: pointer;
+`
+
+const HiddenButton = styled.button`
+  visibility: hidden;
+  position: absolute;
 `
