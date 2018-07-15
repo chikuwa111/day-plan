@@ -21,7 +21,7 @@ const isMobile = (() => {
   if (userAgent.indexOf('android') !== -1) return true
   return false
 })()
-const Backend = isMobile ? TouchBackend : HTML5Backend
+const Backend = isMobile ? TouchBackend({ delayTouchStart: 200 }) : HTML5Backend
 
 const theme = createMuiTheme({
   palette: {
