@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import type { Task } from '../types'
 import { Colors, TimeLengths } from '../constants'
 import Card from '@material-ui/core/Card'
-import TextField from '@material-ui/core/TextField'
+import Input from '@material-ui/core/Input'
 import Icon from '@material-ui/core/Icon'
 import IconButton from '@material-ui/core/IconButton'
 import ScheduleIcon from '@material-ui/icons/Schedule'
@@ -55,16 +55,18 @@ export default class EditingTask extends React.PureComponent<Props> {
         }}
       >
         <Container task={task}>
-          <BodyField
-            autoFocus
-            value={task.body}
-            onChange={e => {
-              onChange({
-                ...task,
-                body: e.target.value,
-              })
-            }}
-          />
+          <InputWrapper>
+            <Input
+              autoFocus
+              value={task.body}
+              onChange={e => {
+                onChange({
+                  ...task,
+                  body: e.target.value,
+                })
+              }}
+            />
+          </InputWrapper>
           <SelectWrapper>
             <SelectIcon>
               <ScheduleIcon />
@@ -121,10 +123,11 @@ const Container = styled(Card)`
   }
 `
 
-const BodyField = styled(TextField)`
-  && {
-    width: 100%;
-  }
+const InputWrapper = styled.div`
+  min-width: 0;
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
 `
 
 const SelectWrapper = styled.div`
