@@ -48,6 +48,7 @@ export default class EditingTask extends React.PureComponent<Props> {
 
     return (
       <form
+        action="" /* iOSで開くボタンを表示させるために必要 */
         ref={container => (this.container = container)}
         onSubmit={e => {
           e.preventDefault()
@@ -105,7 +106,6 @@ export default class EditingTask extends React.PureComponent<Props> {
             <DeleteIcon onClick={onDestroy} />
           </IconButton>
         </Container>
-        <HiddenButton type="submit" />
       </form>
     )
   }
@@ -157,9 +157,4 @@ const Select = styled.select`
   border: 0;
   border-radius: 0;
   cursor: pointer;
-`
-
-const HiddenButton = styled.button`
-  visibility: hidden;
-  position: absolute;
 `
