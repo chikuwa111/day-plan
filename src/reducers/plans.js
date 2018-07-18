@@ -1,22 +1,22 @@
 // @flow
 import nanoid from 'nanoid'
 import { newTask, newEmptyTasks, newPlan } from '../lib/util'
-import { TaskPlaces } from '../constants'
+import { TaskPlaces, TutorialPlan } from '../constants'
 import type { Action } from '../actions'
 import type { PlansState, Plan, Task } from '../types'
 
-const initialState: () => PlansState = () => {
+const initialState: (plan: ?Plan) => PlansState = plan => {
   const id = nanoid(7)
   return {
     active: id,
     plans: {
-      [id]: newPlan(),
+      [id]: plan || newPlan(),
     },
   }
 }
 
 const plans = (
-  plans: PlansState = initialState(),
+  plans: PlansState = initialState(TutorialPlan),
   action: Action
 ): PlansState => {
   const plan = plans.plans[plans.active]

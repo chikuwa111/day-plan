@@ -4,7 +4,20 @@ import { TaskPlaces } from '../constants'
 import type { Action } from '../actions'
 import type { StockState } from '../types'
 
-const initialState: StockState = []
+const initialState: StockState = [
+  {
+    id: 'CKQxvDm',
+    body: 'ここはストック場所です！',
+    color: '#fafafa',
+    length: 30,
+  },
+  {
+    id: 'ZtGbcQB',
+    body: 'ここにある予定は、どのPlanからもアクセスできます！',
+    color: '#ffd180',
+    length: 60,
+  },
+]
 
 const stock = (
   stock: StockState = initialState,
