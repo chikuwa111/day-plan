@@ -8,13 +8,13 @@ import { deletePlan } from '../lib/firestore'
 import type { State, Plan } from '../types'
 import { TimeRange } from '../constants'
 import { updateTime, updateTitle, destroyPlan } from '../actions/plan'
-import TimeChanger from '../components/TimeChanger'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import Input from '@material-ui/core/Input'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import TimeChanger from '../components/TimeChanger'
 
 type Props = {|
   open: boolean,
