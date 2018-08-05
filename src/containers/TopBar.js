@@ -1,34 +1,19 @@
 // @flow
 import * as React from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import type { State, PlansState } from '../types'
-import {
-  addPlan,
-  destroyPlan,
-  switchPlan,
-  updateTitle,
-  updateTime,
-  updateCloudId,
-} from '../actions/plan'
+import type { State } from '../types'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
 import SettingsIcon from '@material-ui/icons/Settings'
-import Drawer from '../components/Drawer'
-import Dialog from '../components/Dialog'
+import MenuDrawer from '../containers/MenuDrawer'
+import SettingDialog from '../containers/SettingDialog'
 
 type Props = {|
-  plans: PlansState,
-  addPlan: () => void,
-  destroyPlan: () => void,
-  switchPlan: string => void,
-  updateTitle: string => void,
-  updateTime: ('start' | 'end', number) => void,
-  updateCloudId: (?string) => void,
+  title: string,
 |}
 
 type TopBarState = {|
@@ -36,28 +21,14 @@ type TopBarState = {|
   dialogOpen: boolean,
 |}
 
-const mapStateToProps = (state: State) => ({
-  plans: state.plans,
-})
+const mapStateToProps = (state: State) => {
+  const activePlan = state.plans.plans[state.plans.active]
+  return {
+    title: activePlan.title,
+  }
+}
 
-const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators(
-    {
-      addPlan,
-      destroyPlan,
-      switchPlan,
-      updateTitle,
-      updateTime,
-      updateCloudId,
-    },
-    dispatch
-  ),
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(
+export default connect(mapStateToProps)(
   class TopBar extends React.PureComponent<Props, TopBarState> {
     constructor(props: Props) {
       super(props)
@@ -76,17 +47,7 @@ export default connect(
     }
 
     render() {
-      const {
-        plans: plansState,
-        addPlan,
-        destroyPlan,
-        switchPlan,
-        updateTitle,
-        updateTime,
-        updateCloudId,
-      } = this.props
-      const { plans, active } = plansState
-      const activePlan = plans[active]
+      const { title } = this.props
       const { drawerOpen, dialogOpen } = this.state
 
       return (
@@ -97,7 +58,7 @@ export default connect(
                 <MenuIcon />
               </LeftIconButton>
               <FlexTypography variant="title" color="inherit">
-                {activePlan.title}
+                {title}
               </FlexTypography>
               <RightIconButton
                 color="inherit"
@@ -107,23 +68,8 @@ export default connect(
               </RightIconButton>
             </Toolbar>
           </AppBarContainer>
-          <Drawer
-            open={drawerOpen}
-            onClose={this.toggleDrawer(false)}
-            plans={plans}
-            active={active}
-            updateCloudId={updateCloudId}
-            addPlan={addPlan}
-            destroyPlan={destroyPlan}
-            switchPlan={switchPlan}
-          />
-          <Dialog
-            open={dialogOpen}
-            onClose={this.toggleDialog(false)}
-            plan={activePlan}
-            updateTitle={updateTitle}
-            updateTime={updateTime}
-          />
+          <MenuDrawer open={drawerOpen} onClose={this.toggleDrawer(false)} />
+          <SettingDialog open={dialogOpen} onClose={this.toggleDialog(false)} />
         </div>
       )
     }
