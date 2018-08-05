@@ -4,15 +4,17 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
+import { deletePlan } from '../lib/firestore'
 import type { State, Plan } from '../types'
 import { TimeRange } from '../constants'
-import { updateTime, updateTitle } from '../actions/plan'
+import { updateTime, updateTitle, destroyPlan } from '../actions/plan'
 import TimeChanger from '../components/TimeChanger'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import Input from '@material-ui/core/Input'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 
 type Props = {|
   open: boolean,
@@ -21,6 +23,7 @@ type Props = {|
   plan: Plan,
   updateTitle: string => void,
   updateTime: ('start' | 'end', number) => void,
+  destroyPlan: () => void,
 |}
 
 const mapStateToProps = (state: State) => ({
@@ -28,7 +31,7 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ updateTime, updateTitle }, dispatch),
+  ...bindActionCreators({ updateTime, updateTitle, destroyPlan }, dispatch),
 })
 
 export default connect(
@@ -36,13 +39,22 @@ export default connect(
   mapDispatchToProps
 )(
   pure(function SettingDialog(props: Props) {
-    const { open, onClose, plan, updateTitle, updateTime } = props
+    const { open, onClose, plan, updateTitle, updateTime, destroyPlan } = props
     const { title, start, end, tasks } = plan
 
     const disableMinusStart = start <= TimeRange.min
     const disablePlusStart = tasks.slice(0, 2).some(task => task != null)
     const disableMinusEnd = tasks.slice(-2).some(task => task != null)
     const disablePlusEnd = TimeRange.max <= end
+
+    const onDestroy = () => {
+      if (!window.confirm('Are you sure to delete this plan?')) return
+
+      if (plan.cloudId) {
+        deletePlan(plan)
+      }
+      destroyPlan()
+    }
 
     return (
       <Dialog open={open} onClose={onClose}>
@@ -71,6 +83,10 @@ export default connect(
             disableMinus={disableMinusEnd}
             disablePlus={disablePlusEnd}
           />
+          <MarginDiv />
+          <Button variant="contained" color="secondary" onClick={onDestroy}>
+            DELETE PLAN
+          </Button>
         </DialogContent>
       </Dialog>
     )

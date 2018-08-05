@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import pure from 'recompose/pure'
 import type { State, Plan } from '../types'
-import { addPlan, destroyPlan, switchPlan } from '../actions/plan'
+import { addPlan, switchPlan } from '../actions/plan'
 import Drawer from '@material-ui/core/Drawer'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
@@ -14,7 +14,6 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import AddBoxIcon from '@material-ui/icons/AddBox'
-import DeleteIcon from '@material-ui/icons/Delete'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import Typography from '@material-ui/core/Typography'
 
@@ -25,7 +24,6 @@ type Props = {|
   plans: { [id: string]: Plan },
   active: string,
   addPlan: () => void,
-  destroyPlan: () => void,
   switchPlan: string => void,
 |}
 
@@ -35,7 +33,7 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ addPlan, destroyPlan, switchPlan }, dispatch),
+  ...bindActionCreators({ addPlan, switchPlan }, dispatch),
 })
 
 export default connect(
@@ -43,37 +41,17 @@ export default connect(
   mapDispatchToProps
 )(
   pure(function MenuDrawer(props: Props) {
-    const {
-      open,
-      onClose,
-      plans,
-      active,
-      addPlan,
-      destroyPlan,
-      switchPlan,
-    } = props
+    const { open, onClose, plans, active, addPlan, switchPlan } = props
 
     return (
       <Drawer anchor="left" open={open} onClose={onClose}>
         <Container onClick={onClose}>
-          <List subheader={<ListSubheader component="div">Plan</ListSubheader>}>
+          <List>
             <ListItem button onClick={addPlan}>
               <ListItemIcon>
                 <AddBoxIcon />
               </ListItemIcon>
               <ListItemText primary="New plan" />
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => {
-                if (window.confirm('Are you sure to delete this plan?'))
-                  destroyPlan()
-              }}
-            >
-              <ListItemIcon>
-                <DeleteIcon />
-              </ListItemIcon>
-              <ListItemText primary="Delete plan" />
             </ListItem>
           </List>
           <Divider />
