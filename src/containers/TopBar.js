@@ -10,6 +10,7 @@ import {
   switchPlan,
   updateTitle,
   updateTime,
+  updateCloudId,
 } from '../actions/plan'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -27,6 +28,7 @@ type Props = {|
   switchPlan: string => void,
   updateTitle: string => void,
   updateTime: ('start' | 'end', number) => void,
+  updateCloudId: (?string) => void,
 |}
 
 type TopBarState = {|
@@ -40,7 +42,14 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(
-    { addPlan, destroyPlan, switchPlan, updateTitle, updateTime },
+    {
+      addPlan,
+      destroyPlan,
+      switchPlan,
+      updateTitle,
+      updateTime,
+      updateCloudId,
+    },
     dispatch
   ),
 })
@@ -74,6 +83,7 @@ export default connect(
         switchPlan,
         updateTitle,
         updateTime,
+        updateCloudId,
       } = this.props
       const { plans, active } = plansState
       const activePlan = plans[active]
@@ -102,6 +112,7 @@ export default connect(
             onClose={this.toggleDrawer(false)}
             plans={plans}
             active={active}
+            updateCloudId={updateCloudId}
             addPlan={addPlan}
             destroyPlan={destroyPlan}
             switchPlan={switchPlan}

@@ -8,6 +8,10 @@ type UpdateTimeAction = {
   name: 'start' | 'end',
   time: number,
 }
+type UpdateCloudIdAction = {
+  type: 'PLAN__UPDATE_CLOUD_ID',
+  cloudId: ?string,
+}
 
 export type PlanAction =
   | AddAction
@@ -15,6 +19,7 @@ export type PlanAction =
   | SwitchAction
   | UpdateTitleAction
   | UpdateTimeAction
+  | UpdateCloudIdAction
 
 export const addPlan = () => ({
   type: 'PLAN__ADD',
@@ -38,4 +43,9 @@ export const updateTime = (name: 'start' | 'end', time: number) => ({
   type: 'PLAN__UPDATE_TIME',
   name,
   time,
+})
+
+export const updateCloudId = (cloudId: ?string) => ({
+  type: 'PLAN__UPDATE_CLOUD_ID',
+  cloudId,
 })

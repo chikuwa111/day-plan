@@ -25,6 +25,7 @@ export type Plan = {|
   start: number,
   end: number,
   tasks: Array<?Task>,
+  cloudId?: ?string,
 |}
 
 export type Task = {|

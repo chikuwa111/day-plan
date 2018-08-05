@@ -78,6 +78,11 @@ const plans = (
         end: action.time,
         tasks: [...tasks, ...newEmptyTasks((action.time - plan.end) * 2)],
       })
+    case 'PLAN__UPDATE_CLOUD_ID':
+      return updateActivePlan(plans, {
+        ...plan,
+        cloudId: action.cloudId,
+      })
     case 'TASK__ADD':
       return updateActivePlanTasks(plans, [
         ...tasks.slice(0, action.index),
