@@ -15,7 +15,6 @@ type Props = {|
   onClick: () => void,
 
   connectDragSource: Function,
-  connectDragPreview: Function,
   isDragging: boolean,
 |}
 
@@ -31,33 +30,23 @@ const dragSource = {
 
 const collect = (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging(),
 })
 
 export default DragSource('TASK', dragSource, collect)(
   pure(function Task(props: Props) {
-    const {
-      task,
-      place,
-      index,
-      onClick,
-      connectDragSource,
-      connectDragPreview,
-      isDragging,
-    } = props
+    const { task, place, index, onClick, connectDragSource, isDragging } = props
 
-    return connectDragPreview(
+    return connectDragSource(
       <div style={wrapperStyle} onClick={onClick}>
         <Container opacity={isDragging ? 0.5 : 1} task={task}>
           <Body>{task.body}</Body>
         </Container>
         <CoveredContainer>
-          <DragSourceDiv innerRef={instance => connectDragSource(instance)} />
           {isDragging &&
             place === TaskPlaces.TIMETABLE &&
-            Array.from({ length: task.length / 30 - 1 }, (_, i) => (
-              <DropTarget key={i} offset={i + 1} place={place} index={index} />
+            Array.from({ length: task.length / 30 }, (_, i) => (
+              <DropTarget key={i} offset={i} place={place} index={index} />
             ))}
         </CoveredContainer>
       </div>
@@ -92,9 +81,4 @@ const CoveredContainer = styled.div`
   position: absolute;
   top: 0;
   width: 100%;
-`
-
-const DragSourceDiv = styled.div`
-  height: 2rem;
-  cursor: move;
 `

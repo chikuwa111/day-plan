@@ -74,7 +74,7 @@ export const TutorialPlan = {
     { id: 'CQJWNa0', body: '3. 予定の移動', color: '#ffd180', length: 30 },
     {
       id: 'fVhbo_g',
-      body: '上から30分の箇所をドラッグ！',
+      body: 'まずはドラッグ！',
       color: '#fafafa',
       length: 30,
     },

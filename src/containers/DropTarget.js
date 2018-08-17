@@ -81,7 +81,7 @@ const dropTarget = {
     }
     if (from === TaskPlaces.TIMETABLE && to === TaskPlaces.TIMETABLE) {
       const taskSize = draggedTask.length / 30
-      if (fromIndex === toIndex && offset) {
+      if (fromIndex === toIndex) {
         const dropTargets = tasks.slice(toIndex + 1, toIndex + 1 + offset)
         return (
           dropTargets.length >= offset &&
@@ -99,7 +99,6 @@ const dropTarget = {
         dropTargets.every(task => task == null)
       )
     }
-    console.error('Unexpected dragging task')
     return false
   },
 }
