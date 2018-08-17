@@ -28,6 +28,24 @@ export const getTodayStr = (): string => {
   return `${year}-${month}-${date}`
 }
 
+export const calcFromOffset = (
+  initialOffset: ?{ x: number, y: number },
+  initialSourceOffset: ?{ x: number, y: number }
+) => {
+  // ドラッグ位置からタスクのどの部分をドラッグ中か求める関数
+  // 0-30minなら0, 30-60minなら1, ...を返す
+
+  // Taskは30minで32px (16px * 2rem)
+  // 16pxはindex.htmlのcssで指定している
+  // サイズの変更があった場合はこれも対応させる必要あり
+  const PX_HEIGHT_FOR_30MIN = 32
+
+  if (initialOffset == null || initialSourceOffset == null) return 0
+
+  const dragYPositionFromTop = initialOffset.y - initialSourceOffset.y
+  return Math.floor(dragYPositionFromTop / PX_HEIGHT_FOR_30MIN)
+}
+
 export const canMove = (
   tasks: Array<?Task>,
   task: Task,
@@ -46,26 +64,43 @@ export const canMove = (
   }
   if (from === TaskPlaces.STOCK && to === TaskPlaces.TIMETABLE) {
     const taskSize = task.length / 30
-    const dropTargets = tasks.slice(toIndex, toIndex + taskSize)
+    const dropTargets = tasks.slice(
+      toIndex - fromOffset,
+      toIndex - fromOffset + taskSize
+    )
     return (
       dropTargets.length >= taskSize && dropTargets.every(task => task == null)
     )
   }
   if (from === TaskPlaces.TIMETABLE && to === TaskPlaces.TIMETABLE) {
     const taskSize = task.length / 30
-    if (fromIndex === toIndex) {
-      const dropTargets = tasks.slice(toIndex + 1, toIndex + 1 + toOffset)
+    const moveDiff =
+      toIndex - fromOffset <= fromIndex && fromIndex < toIndex
+        ? fromIndex - (taskSize - 1) - (toIndex - fromOffset)
+        : fromIndex - toOffset - (toIndex - fromOffset)
+    const moveSize = Math.abs(moveDiff)
+    if (moveSize < taskSize) {
+      // ドラッグしたTaskとドロップしたTaskが被っている
+      if (moveDiff <= 0) {
+        // 完全に被っているかドロップしたTaskの方が下
+        const dropTargets = tasks.slice(fromIndex + 1, fromIndex + 1 + moveSize)
+        return (
+          dropTargets.length >= moveSize &&
+          dropTargets.every(task => task == null)
+        )
+      }
+      // ドロップしたTaskの方が上
+      const dropTargets = tasks.slice(fromIndex - moveSize, fromIndex)
       return (
-        dropTargets.length >= toOffset &&
+        dropTargets.length >= moveSize &&
         dropTargets.every(task => task == null)
       )
     }
-    const moveSize = Math.abs(toIndex - fromIndex)
-    if (toIndex < fromIndex && moveSize < taskSize) {
-      const dropTargets = tasks.slice(toIndex, fromIndex)
-      return dropTargets.every(task => task == null)
-    }
-    const dropTargets = tasks.slice(toIndex, toIndex + taskSize)
+    // ドラッグしたTaskとドロップしたTaskが被っていない
+    const dropTargets = tasks.slice(
+      toIndex - fromOffset,
+      toIndex - fromOffset + taskSize
+    )
     return (
       dropTargets.length >= taskSize && dropTargets.every(task => task == null)
     )
@@ -85,36 +120,40 @@ export const move = (
 ): Array<?Task> => {
   const taskSize = task.length / 30
   if (from === TaskPlaces.TIMETABLE && to === TaskPlaces.TIMETABLE) {
-    if (fromIndex === toIndex) {
+    const moveDiff =
+      toIndex - fromOffset <= fromIndex && fromIndex < toIndex
+        ? fromIndex - (taskSize - 1) - (toIndex - fromOffset)
+        : fromIndex - toOffset - (toIndex - fromOffset)
+    const moveSize = Math.abs(moveDiff)
+    if (moveSize < taskSize) {
+      if (moveDiff <= 0) {
+        return [
+          ...tasks.slice(0, fromIndex),
+          ...newEmptyTasks(moveSize),
+          task,
+          ...tasks.slice(fromIndex + 1 + moveSize),
+        ]
+      }
       return [
-        ...tasks.slice(0, fromIndex),
-        ...newEmptyTasks(toOffset),
+        ...tasks.slice(0, fromIndex - moveSize),
         task,
-        ...tasks.slice(toIndex + 1 + toOffset),
+        ...newEmptyTasks(moveSize),
+        ...tasks.slice(fromIndex + 1),
       ]
     }
     if (fromIndex < toIndex) {
       return [
         ...tasks.slice(0, fromIndex),
         ...newEmptyTasks(taskSize),
-        ...tasks.slice(fromIndex + 1, toIndex),
+        ...tasks.slice(fromIndex + 1, toIndex - fromOffset),
         task,
-        ...tasks.slice(toIndex + taskSize),
-      ]
-    }
-    const moveSize = Math.abs(fromIndex - toIndex)
-    if (moveSize < taskSize) {
-      return [
-        ...tasks.slice(0, toIndex),
-        task,
-        ...newEmptyTasks(moveSize),
-        ...tasks.slice(fromIndex + 1),
+        ...tasks.slice(toIndex - fromOffset + taskSize),
       ]
     }
     return [
-      ...tasks.slice(0, toIndex),
+      ...tasks.slice(0, toIndex - fromOffset),
       task,
-      ...tasks.slice(toIndex + taskSize, fromIndex),
+      ...tasks.slice(toIndex - fromOffset + taskSize, fromIndex),
       ...newEmptyTasks(taskSize),
       ...tasks.slice(fromIndex + 1),
     ]
@@ -128,9 +167,9 @@ export const move = (
   }
   if (to === TaskPlaces.TIMETABLE) {
     return [
-      ...tasks.slice(0, toIndex),
+      ...tasks.slice(0, toIndex - fromOffset),
       task,
-      ...tasks.slice(toIndex + taskSize),
+      ...tasks.slice(toIndex - fromOffset + taskSize),
     ]
   }
   return tasks
