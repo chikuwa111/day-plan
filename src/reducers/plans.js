@@ -1,7 +1,7 @@
 // @flow
 import nanoid from 'nanoid'
-import { newTask, newEmptyTasks, newPlan } from '../lib/util'
-import { TaskPlaces, TutorialPlan } from '../constants'
+import { newTask, newEmptyTasks, newPlan, move } from '../lib/task'
+import { TutorialPlan } from '../constants'
 import type { Action } from '../actions'
 import type { PlansState, Plan, Task } from '../types'
 
@@ -125,60 +125,19 @@ const plans = (
       ])
     }
     case 'TASK__MOVE': {
-      const taskSize = action.task.length / 30
-      if (
-        action.from === TaskPlaces.TIMETABLE &&
-        action.to === TaskPlaces.TIMETABLE
-      ) {
-        if (action.fromIndex === action.toIndex) {
-          return updateActivePlanTasks(plans, [
-            ...tasks.slice(0, action.fromIndex),
-            ...newEmptyTasks(action.offset),
-            action.task,
-            ...tasks.slice(action.toIndex + 1 + action.offset),
-          ])
-        }
-        if (action.fromIndex < action.toIndex) {
-          return updateActivePlanTasks(plans, [
-            ...tasks.slice(0, action.fromIndex),
-            ...newEmptyTasks(taskSize),
-            ...tasks.slice(action.fromIndex + 1, action.toIndex),
-            action.task,
-            ...tasks.slice(action.toIndex + taskSize),
-          ])
-        }
-        const moveSize = Math.abs(action.fromIndex - action.toIndex)
-        if (moveSize < taskSize) {
-          return updateActivePlanTasks(plans, [
-            ...tasks.slice(0, action.toIndex),
-            action.task,
-            ...newEmptyTasks(moveSize),
-            ...tasks.slice(action.fromIndex + 1),
-          ])
-        }
-        return updateActivePlanTasks(plans, [
-          ...tasks.slice(0, action.toIndex),
+      return updateActivePlanTasks(
+        plans,
+        move(
+          tasks,
           action.task,
-          ...tasks.slice(action.toIndex + taskSize, action.fromIndex),
-          ...newEmptyTasks(taskSize),
-          ...tasks.slice(action.fromIndex + 1),
-        ])
-      }
-      if (action.from === TaskPlaces.TIMETABLE) {
-        return updateActivePlanTasks(plans, [
-          ...tasks.slice(0, action.fromIndex),
-          ...newEmptyTasks(taskSize),
-          ...tasks.slice(action.fromIndex + 1),
-        ])
-      }
-      if (action.to === TaskPlaces.TIMETABLE) {
-        return updateActivePlanTasks(plans, [
-          ...tasks.slice(0, action.toIndex),
-          action.task,
-          ...tasks.slice(action.toIndex + taskSize),
-        ])
-      }
-      return plans
+          action.from,
+          action.fromIndex,
+          action.fromOffset,
+          action.to,
+          action.toIndex,
+          action.toOffset
+        )
+      )
     }
     default:
       return plans

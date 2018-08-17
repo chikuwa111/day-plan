@@ -6,22 +6,23 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { DropTarget } from 'react-dnd'
 import { moveTask } from '../actions/task'
-import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
+import { canMove } from '../lib/task'
 
 type Props = {|
   place: TaskPlace,
   index: number,
   offset?: number,
 
-  tasks: Array<Task>,
+  tasks: Array<?Task>,
   moveTask: (
     task: Task,
     from: TaskPlace,
     fromIndex: number,
+    fromOffset: number,
     to: TaskPlace,
     toIndex: number,
-    offset: number
+    toOffset: number
   ) => void,
 
   connectDropTarget: Function,
@@ -47,59 +48,16 @@ const mapDispatchToProps = dispatch => ({
 
 const dropTarget = {
   drop(props: Props, monitor) {
-    const { task, place, index } = monitor.getItem()
-    props.moveTask(
-      task,
-      place,
-      index,
-      props.place,
-      props.index,
-      props.offset || 0
-    )
-  },
-  canDrop(props, monitor) {
-    const {
-      task: draggedTask,
-      place: from,
-      index: fromIndex,
-    } = monitor.getItem()
-    const { place: to, index: toIndex, offset, tasks } = props
+    const { task, place: from, index: fromIndex } = monitor.getItem()
+    const { moveTask, place: to, index: toIndex, offset: toOffset } = props
 
-    if (from === TaskPlaces.STOCK && to === TaskPlaces.STOCK) {
-      return false
-    }
-    if (from === TaskPlaces.TIMETABLE && to === TaskPlaces.STOCK) {
-      return true
-    }
-    if (from === TaskPlaces.STOCK && to === TaskPlaces.TIMETABLE) {
-      const taskSize = draggedTask.length / 30
-      const dropTargets = tasks.slice(toIndex, toIndex + taskSize)
-      return (
-        dropTargets.length >= taskSize &&
-        dropTargets.every(task => task == null)
-      )
-    }
-    if (from === TaskPlaces.TIMETABLE && to === TaskPlaces.TIMETABLE) {
-      const taskSize = draggedTask.length / 30
-      if (fromIndex === toIndex) {
-        const dropTargets = tasks.slice(toIndex + 1, toIndex + 1 + offset)
-        return (
-          dropTargets.length >= offset &&
-          dropTargets.every(task => task == null)
-        )
-      }
-      const moveSize = Math.abs(toIndex - fromIndex)
-      if (toIndex < fromIndex && moveSize < taskSize) {
-        const dropTargets = tasks.slice(toIndex, fromIndex)
-        return dropTargets.every(task => task == null)
-      }
-      const dropTargets = tasks.slice(toIndex, toIndex + taskSize)
-      return (
-        dropTargets.length >= taskSize &&
-        dropTargets.every(task => task == null)
-      )
-    }
-    return false
+    moveTask(task, from, fromIndex, 0, to, toIndex, toOffset || 0)
+  },
+  canDrop(props: Props, monitor) {
+    const { task, place: from, index: fromIndex } = monitor.getItem()
+    const { tasks, place: to, index: toIndex, offset: toOffset } = props
+
+    return canMove(tasks, task, from, fromIndex, 0, to, toIndex, toOffset || 0)
   },
 }
 
