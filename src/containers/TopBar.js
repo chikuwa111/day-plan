@@ -8,11 +8,11 @@ import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
-import ShareIcon from '@material-ui/icons/Share'
+// import ShareIcon from '@material-ui/icons/Share'
 import SettingsIcon from '@material-ui/icons/Settings'
 import MenuDrawer from '../containers/MenuDrawer'
 import SettingDialog from '../containers/SettingDialog'
-import ShareDialog from '../containers/ShareDialog'
+// import ShareDialog from '../containers/ShareDialog'
 
 type Props = {|
   title: string,
@@ -62,9 +62,9 @@ export default connect(mapStateToProps)(
               <FlexTypography variant="title" color="inherit">
                 {title}
               </FlexTypography>
-              <IconButton color="inherit" onClick={this.toggleDialog('share')}>
+              {/* <IconButton color="inherit" onClick={this.toggleDialog('share')}>
                 <ShareIcon />
-              </IconButton>
+              </IconButton> */}
               <RightIconButton
                 color="inherit"
                 onClick={this.toggleDialog('setting')}
@@ -78,10 +78,10 @@ export default connect(mapStateToProps)(
             open={openDialog === 'setting'}
             onClose={this.toggleDialog('')}
           />
-          <ShareDialog
+          {/* <ShareDialog
             open={openDialog === 'share'}
             onClose={this.toggleDialog('')}
-          />
+          /> */}
         </div>
       )
     }
