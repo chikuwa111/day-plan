@@ -75,8 +75,8 @@ export const canMove = (
   if (from === TaskPlaces.TIMETABLE && to === TaskPlaces.TIMETABLE) {
     const taskSize = task.length / 30
     const moveDiff =
-      toIndex - fromOffset <= fromIndex && fromIndex < toIndex
-        ? fromIndex - (taskSize - 1) - (toIndex - fromOffset)
+      fromIndex < toIndex
+        ? fromIndex - toOffset - (taskSize - 1) - (toIndex - fromOffset)
         : fromIndex - toOffset - (toIndex - fromOffset)
     const moveSize = Math.abs(moveDiff)
     if (moveSize < taskSize) {
@@ -121,8 +121,8 @@ export const move = (
   const taskSize = task.length / 30
   if (from === TaskPlaces.TIMETABLE && to === TaskPlaces.TIMETABLE) {
     const moveDiff =
-      toIndex - fromOffset <= fromIndex && fromIndex < toIndex
-        ? fromIndex - (taskSize - 1) - (toIndex - fromOffset)
+      fromIndex < toIndex
+        ? fromIndex - toOffset - (taskSize - 1) - (toIndex - fromOffset)
         : fromIndex - toOffset - (toIndex - fromOffset)
     const moveSize = Math.abs(moveDiff)
     if (moveSize < taskSize) {
