@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react'
-import pure from 'recompose/pure'
 import styled from 'styled-components'
 import type { Plan } from '../../../src/types'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -12,7 +11,7 @@ type Props = {|
   plan: ?Plan,
 |}
 
-export default pure(function App(props: Props) {
+export default function App(props: Props) {
   const { plan } = props
 
   return (
@@ -24,7 +23,7 @@ export default pure(function App(props: Props) {
       </Container>
     </React.Fragment>
   )
-})
+}
 
 const Container = styled.div`
   height: 100%;
