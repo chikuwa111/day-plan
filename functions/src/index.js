@@ -1,6 +1,9 @@
 // @flow
-import functions from 'firebase-functions'
-import admin from 'firebase-admin'
+
+// importを使うと動かない
+const functions = require('firebase-functions')
+const admin = require('firebase-admin')
+
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
@@ -21,6 +24,7 @@ const index: any = fs.readFileSync(__dirname + '/index.html', 'utf8')
 
 admin.initializeApp(functions.config().firebase)
 const firestore = admin.firestore()
+firestore.settings({ timestampsInSnapshots: true })
 
 const app = express()
 app.get('/p/:id', (req, res) => {
@@ -28,6 +32,7 @@ app.get('/p/:id', (req, res) => {
   firestore
     .collection('plans')
     .doc(id)
+    .get()
     .then(documentSnapshot => {
       const plan = documentSnapshot.data()
       const status = plan != null ? 200 : 404
