@@ -11,6 +11,7 @@
 /functions/dist/*
 !/functions/dist/index.html
 /functions/node_modules
+/.firebase
 
 # misc
 .DS_Store
