@@ -16,10 +16,20 @@ export default pure(function App(props: Props) {
   const { plan } = props
 
   return (
-    <div>
+    <React.Fragment>
       <CssBaseline />
       <TopBar title={plan != null ? plan.title : '404 NOTFOUND'} />
-      {plan == null ? <NotFound /> : <TimeTable plan={plan} />}
-    </div>
+      <Container>
+        {plan == null ? <NotFound /> : <TimeTable plan={plan} />}
+      </Container>
+    </React.Fragment>
   )
 })
+
+const Container = styled.div`
+  height: 100%;
+  padding-top: 56px;
+  @media (min-width: 600px) {
+    padding-top: 64px;
+  }
+`
