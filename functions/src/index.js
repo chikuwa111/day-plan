@@ -27,7 +27,9 @@ app.get('/p/:id', (req, res) => {
       const html = renderToString(<App plan={plan} />)
 
       const finalHtml = index
-        .replace('<!-- ::TITLE:: -->', title)
+        .replace('::OG_TITLE::', id)
+        .replace('::PLAN_ID::', id)
+        .replace('<!-- ::TITLE:: -->', id)
         .replace('<!-- ::APP:: -->', html)
 
       res.set('Cache-Control', 'public, max-age=600, s-maxage=1200')
@@ -35,4 +37,4 @@ app.get('/p/:id', (req, res) => {
     })
 })
 
-export let ssrapp = functions.https.onRequest(app)
+export const ssrapp = functions.https.onRequest(app)
