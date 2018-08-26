@@ -15,7 +15,7 @@ type Props = {|
 
 export default function TopBar(props: Props) {
   const { plan } = props
-  const title = plan != null ? plan.title : '404 NOTFOUND'
+  const title = plan != null ? plan.title : 'NOT FOUND'
   const escapedTitle = escape(title)
   const shareUrl =
     plan == null || plan.cloudId == null
