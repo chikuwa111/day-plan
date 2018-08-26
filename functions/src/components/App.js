@@ -18,7 +18,7 @@ export default pure(function App(props: Props) {
   return (
     <React.Fragment>
       <CssBaseline />
-      <TopBar title={plan != null ? plan.title : '404 NOTFOUND'} />
+      <TopBar plan={plan} />
       <Container>
         {plan == null ? <NotFound /> : <TimeTable plan={plan} />}
       </Container>
