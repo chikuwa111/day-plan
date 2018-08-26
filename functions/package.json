@@ -5,7 +5,8 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "babel": "babel src/index.js -o dist/index.js && babel src/components -d dist/components"
+    "start:components": "babel -w src/components -d dist/components",
+    "build": "babel src/index.js -o dist/index.js && babel src/components -d dist/components"
   },
   "dependencies": {
     "express": "^4.16.3",
