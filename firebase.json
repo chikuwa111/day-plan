@@ -9,6 +9,10 @@
     ],
     "rewrites": [
       {
+        "source": "/p/**",
+        "function": "ssrapp"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
