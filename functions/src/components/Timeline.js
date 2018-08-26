@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react'
-import pure from 'recompose/pure'
 import styled from 'styled-components'
 
 type Props = {|
@@ -8,7 +7,7 @@ type Props = {|
   end: number,
 |}
 
-export default pure(function Timeline(props: Props) {
+export default function Timeline(props: Props) {
   const { start, end } = props
   const length = end - start
   const timelineArray = Array.from({ length }, (_, i) => start + i)
@@ -24,7 +23,7 @@ export default pure(function Timeline(props: Props) {
       <Line>{`${end} -`}</Line>
     </div>
   )
-})
+}
 
 const Line = styled.div`
   height: 2rem;
