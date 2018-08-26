@@ -79,6 +79,9 @@ export default connect(
       const { uploadState } = this.state
 
       const shared = plan.cloudId != null
+      const shareUrl =
+        plan.cloudId != null ? `https://day-plan.app/p/${plan.cloudId}` : ''
+      const encodedTitle = encodeURI(plan.title)
 
       return (
         <Dialog open={open} onEnter={this.onEnter} onClose={onClose}>
@@ -91,10 +94,22 @@ export default connect(
             )}
             {shared ? (
               <React.Fragment>
-                <Typography>ID: {plan.cloudId}</Typography>
+                <Typography>URL: {shareUrl}</Typography>
+                <MarginDiv />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  href={`https://twitter.com/intent/tweet?text=${encodedTitle}&hashtags=DayPlan&url=${shareUrl}`}
+                >
+                  SHARE BY TWITTER
+                </Button>
+                <MarginDiv />
                 <Typography>
                   * You need to update manually to reflect changes after
                   sharing.
+                </Typography>
+                <Typography>
+                  Updating takes time because of CDN caching.
                 </Typography>
               </React.Fragment>
             ) : (
