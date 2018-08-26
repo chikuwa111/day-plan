@@ -1,15 +1,14 @@
 // @flow
 import * as React from 'react'
-import pure from 'recompose/pure'
 import styled from 'styled-components'
-import type { Task } from '../../../src/types'
+import type { Task as TaskType } from '../../../src/types'
 import Card from '@material-ui/core/Card'
 
 type Props = {|
-  task: Task,
+  task: TaskType,
 |}
 
-export default pure(function Task(props: Props) {
+export default function Task(props: Props) {
   const { task } = props
 
   return (
@@ -17,7 +16,7 @@ export default pure(function Task(props: Props) {
       <Body>{task.body}</Body>
     </Container>
   )
-})
+}
 
 const Container = styled(Card)`
   && {

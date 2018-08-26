@@ -1,18 +1,17 @@
 // @flow
 import * as React from 'react'
-import pure from 'recompose/pure'
 import styled from 'styled-components'
 import type { Plan } from '../../../src/types'
 import Grid from '@material-ui/core/Grid'
 import Timeline from '../components/Timeline'
-import TaskComp from '../components/Task'
+import Task from '../components/Task'
 import EmptyTask from '../components/EmptyTask'
 
 type Props = {|
   plan: Plan,
 |}
 
-export default pure(function TimeTable(props: Props) {
+export default function TimeTable(props: Props) {
   const { plan } = props
   const { start, end, tasks } = plan
 
@@ -29,14 +28,14 @@ export default pure(function TimeTable(props: Props) {
             if (task == null) {
               return <EmptyTask key={index} />
             } else {
-              return <TaskComp key={task.id} task={task} />
+              return <Task key={task.id} task={task} />
             }
           })}
         </Grid>
       </GridWrapper>
     </Container>
   )
-})
+}
 
 const Container = styled.div`
   width: 100%;
