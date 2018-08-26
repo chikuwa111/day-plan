@@ -1,0 +1,10 @@
+{
+  "presets": [
+    [
+      "env", {
+        "targets": { "node": "v6.11.5"}
+      }
+    ],
+     "react"
+  ]
+}

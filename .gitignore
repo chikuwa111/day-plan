@@ -8,7 +8,8 @@
 
 # production
 /build
-/functions/build
+/functions/dist/*
+!/functions/dist/index.html
 /functions/node_modules
 
 # misc
