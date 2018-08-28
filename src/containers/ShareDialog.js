@@ -3,7 +3,7 @@ import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { createPlan, updatePlan } from '../lib/firestore'
+import { signInAnonymously, createPlan, updatePlan } from '../lib/firebase'
 import type { State, Plan } from '../types'
 import { updateCloudId } from '../actions/plan'
 import Dialog from '@material-ui/core/Dialog'
@@ -53,21 +53,26 @@ export default connect(
 
       const { plan, updateCloudId } = this.props
 
-      if (plan.cloudId) {
-        updatePlan(plan)
-          .then(() => {
-            this.setState({ uploadState: 'success' })
-          })
-          .catch(_err => {
-            this.setState({ uploadState: 'failure' })
-          })
-        return
-      }
-
-      createPlan(plan)
-        .then(docRef => {
-          this.setState({ uploadState: 'success' })
-          updateCloudId(docRef.id)
+      signInAnonymously()
+        .then(userInfo => {
+          if (plan.cloudId) {
+            updatePlan(plan, userInfo.user.uid)
+              .then(() => {
+                this.setState({ uploadState: 'success' })
+              })
+              .catch(_err => {
+                this.setState({ uploadState: 'failure' })
+              })
+          } else {
+            createPlan(plan, userInfo.user.uid)
+              .then(docRef => {
+                this.setState({ uploadState: 'success' })
+                updateCloudId(docRef.id)
+              })
+              .catch(_err => {
+                this.setState({ uploadState: 'failure' })
+              })
+          }
         })
         .catch(_err => {
           this.setState({ uploadState: 'failure' })
@@ -105,11 +110,11 @@ export default connect(
                 </Button>
                 <MarginDiv />
                 <Typography>
-                  * You need to update manually to reflect changes after
+                  * You need to update manually to reflect changes after.
                   sharing.
                 </Typography>
                 <Typography>
-                  Updating takes time because of CDN caching.
+                  Reflecting changes takes time because of CDN caching.
                 </Typography>
               </React.Fragment>
             ) : (

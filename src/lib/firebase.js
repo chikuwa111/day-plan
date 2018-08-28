@@ -1,5 +1,6 @@
 // @flow
 import firebase from 'firebase/app'
+import 'firebase/auth'
 import 'firebase/firestore'
 import type { Plan } from '../types'
 
@@ -12,15 +13,20 @@ firebase.initializeApp({
   messagingSenderId: '689483713640',
 })
 
-const db = firebase.firestore()
-db.settings = { timestampsInSnapshots: true }
+export const signInAnonymously = () => firebase.auth().signInAnonymously()
 
-export const createPlan = (plan: Plan) => db.collection('plans').add(plan)
-export const updatePlan = (plan: Plan) =>
+const db = firebase.firestore()
+db.settings({ timestampsInSnapshots: true })
+
+export const createPlan = (plan: Plan, userId: string) =>
+  db.collection('plans').add({ ...plan, userId })
+
+export const updatePlan = (plan: Plan, userId: string) =>
   db
     .collection('plans')
     .doc(plan.cloudId)
-    .set(plan)
+    .set({ ...plan, userId })
+
 export const deletePlan = (plan: Plan) =>
   db
     .collection('plans')
