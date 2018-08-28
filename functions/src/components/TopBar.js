@@ -10,17 +10,15 @@ import ShareIcon from '@material-ui/icons/Share'
 import LaunchIcon from '@material-ui/icons/Launch'
 
 type Props = {|
+  planId: string,
   plan: ?Plan,
 |}
 
 export default function TopBar(props: Props) {
-  const { plan } = props
+  const { planId, plan } = props
   const title = plan != null ? plan.title : 'NOT FOUND'
   const encodedTitle = encodeURI(title)
-  const shareUrl =
-    plan == null || plan.cloudId == null
-      ? ''
-      : `https://day-plan.app/p/${plan.cloudId}`
+  const shareUrl = `https://day-plan.app/p/${planId}`
   const disableShare = plan == null
 
   return (

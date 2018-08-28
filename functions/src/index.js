@@ -72,7 +72,7 @@ function renderPage(id, title, plan) {
         generateClassName={generateClassName}
       >
         <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-          <App plan={plan} />
+          <App planId={id} plan={plan} />
         </MuiThemeProvider>
       </JssProvider>
     )

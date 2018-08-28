@@ -8,16 +8,17 @@ import TimeTable from '../components/TimeTable'
 import NotFound from '../components/NotFound'
 
 type Props = {|
+  planId: string,
   plan: ?Plan,
 |}
 
 export default function App(props: Props) {
-  const { plan } = props
+  const { planId, plan } = props
 
   return (
     <React.Fragment>
       <CssBaseline />
-      <TopBar plan={plan} />
+      <TopBar planId={planId} plan={plan} />
       <Container>
         {plan == null ? <NotFound /> : <TimeTable plan={plan} />}
       </Container>
