@@ -15,7 +15,6 @@ export default function EmptyTask() {
 const Container = styled.div`
   width: 100%;
   position: relative;
-  cursor: pointer;
 `
 
 const Wrapper = styled.div`

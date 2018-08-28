@@ -27,7 +27,6 @@ const Container = styled(Card)`
     opacity: ${props => props.opacity};
     display: flex;
     align-items: center;
-    cursor: pointer;
   }
 `
 
