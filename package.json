@@ -28,7 +28,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow",
-    "build:analyze": "node build.js"
+    "build:analyze": "node build.js && sw-precache --config=sw-precache-config.js"
   },
   "prettier": {
     "singleQuote": true,
