@@ -112,7 +112,7 @@ export default connect(
                 </Button>
                 <MarginDiv />
                 <Typography>
-                  * You need to update manually to reflect changes after.
+                  * You need to update manually to reflect changes after
                   sharing.
                 </Typography>
                 <Typography>
