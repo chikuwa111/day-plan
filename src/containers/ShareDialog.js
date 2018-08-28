@@ -99,7 +99,9 @@ export default connect(
             )}
             {shared ? (
               <React.Fragment>
-                <Typography>URL: {shareUrl}</Typography>
+                <Typography>
+                  URL: <a href={shareUrl}>{shareUrl}</a>
+                </Typography>
                 <MarginDiv />
                 <Button
                   variant="contained"
