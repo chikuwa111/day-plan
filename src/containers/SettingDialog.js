@@ -54,6 +54,7 @@ export default connect(
         deletePlan(plan)
       }
       destroyPlan()
+      onClose()
     }
 
     return (
