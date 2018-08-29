@@ -82,7 +82,7 @@ function renderPage(id, title, plan) {
   const materialUiStyle = sheetsRegistry.toString()
 
   const finalHtml = index
-    .replace('::OG_TITLE::', id)
+    .replace('::OG_TITLE::', title)
     .replace('::PLAN_ID::', id)
     .replace('<!-- ::TITLE:: -->', title)
     .replace('<!-- ::APP:: -->', html)
