@@ -5,9 +5,7 @@ import styled from 'styled-components'
 export default function EmptyTask() {
   return (
     <Container>
-      <Wrapper>
-        <Body>+</Body>
-      </Wrapper>
+      <Wrapper />
     </Container>
   )
 }
@@ -30,10 +28,4 @@ const Wrapper = styled.div`
   color: lightgray;
   display: flex;
   align-items: center;
-`
-
-const Body = styled.div`
-  width: 100%;
-  word-break: break-all;
-  text-align: center;
 `
