@@ -8,7 +8,10 @@ type ChangeAction = {
 
 export type SessionAction = ChangeAction
 
-export const changeEditing = (place: TaskPlace, index: number) => ({
+export const changeEditing = (
+  place: TaskPlace,
+  index: number
+): ChangeAction => ({
   type: 'SESSION__CHANGE_EDITING',
   place,
   index,

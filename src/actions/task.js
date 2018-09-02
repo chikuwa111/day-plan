@@ -17,18 +17,18 @@ type MoveAction = {
 
 export type TaskAction = AddAction | UpdateAction | DestroyAction | MoveAction
 
-export const addTask = (index: number) => ({
+export const addTask = (index: number): AddAction => ({
   type: 'TASK__ADD',
   index,
 })
 
-export const updateTask = (index: number, task: Task) => ({
+export const updateTask = (index: number, task: Task): UpdateAction => ({
   type: 'TASK__UPDATE',
   index,
   task,
 })
 
-export const destroyTask = (index: number) => ({
+export const destroyTask = (index: number): DestroyAction => ({
   type: 'TASK__DESTROY',
   index,
 })
@@ -41,7 +41,7 @@ export const moveTask = (
   to: TaskPlace,
   toIndex: number,
   toOffset: number
-) => ({
+): MoveAction => ({
   type: 'TASK__MOVE',
   task,
   from,

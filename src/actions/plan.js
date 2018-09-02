@@ -21,31 +21,34 @@ export type PlanAction =
   | UpdateTimeAction
   | UpdateCloudIdAction
 
-export const addPlan = () => ({
+export const addPlan = (): AddAction => ({
   type: 'PLAN__ADD',
 })
 
-export const destroyPlan = () => ({
+export const destroyPlan = (): DestroyAction => ({
   type: 'PLAN__DESTROY',
 })
 
-export const switchPlan = (id: number) => ({
+export const switchPlan = (id: string): SwitchAction => ({
   type: 'PLAN__SWITCH',
   id,
 })
 
-export const updateTitle = (title: string) => ({
+export const updateTitle = (title: string): UpdateTitleAction => ({
   type: 'PLAN__UPDATE_TITLE',
   title,
 })
 
-export const updateTime = (name: 'start' | 'end', time: number) => ({
+export const updateTime = (
+  name: 'start' | 'end',
+  time: number
+): UpdateTimeAction => ({
   type: 'PLAN__UPDATE_TIME',
   name,
   time,
 })
 
-export const updateCloudId = (cloudId: ?string) => ({
+export const updateCloudId = (cloudId: ?string): UpdateCloudIdAction => ({
   type: 'PLAN__UPDATE_CLOUD_ID',
   cloudId,
 })
