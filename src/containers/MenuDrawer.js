@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import pure from 'recompose/pure'
-import type { State, Plan } from '../types'
+import type { State, PlanList } from '../types'
 import { addPlan, switchPlan } from '../actions/plan'
 import Drawer from '@material-ui/core/Drawer'
 import Divider from '@material-ui/core/Divider'
@@ -21,15 +21,15 @@ type Props = {|
   open: boolean,
   onClose: () => void,
 
-  plans: { [id: string]: Plan },
-  active: string,
+  planList: PlanList,
+  activePlanId: string,
   addPlan: () => void,
   switchPlan: string => void,
 |}
 
 const mapStateToProps = (state: State) => ({
-  plans: state.condition.plans,
-  active: state.session.activePlanId,
+  planList: state.condition.planList,
+  activePlanId: state.session.activePlanId,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -41,7 +41,7 @@ export default connect(
   mapDispatchToProps
 )(
   pure(function MenuDrawer(props: Props) {
-    const { open, onClose, plans, active, addPlan, switchPlan } = props
+    const { open, onClose, planList, activePlanId, addPlan, switchPlan } = props
 
     return (
       <Drawer anchor="left" open={open} onClose={onClose}>
@@ -60,27 +60,25 @@ export default connect(
               <ListSubheader component="div">Other plans</ListSubheader>
             }
           >
-            {Object.keys(plans)
-              .filter(id => id !== active)
-              .map(id => (
-                <ListItem
-                  button
-                  key={id}
-                  onClick={() => {
-                    switchPlan(id)
-                  }}
-                >
-                  <ListItemIcon>
-                    <BookmarkIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    disableTypography
-                    primary={
-                      <EllipsisTypography>{plans[id].title}</EllipsisTypography>
-                    }
-                  />
-                </ListItem>
-              ))}
+            {planList.filter(plan => plan.id !== activePlanId).map(plan => (
+              <ListItem
+                button
+                key={plan.id}
+                onClick={() => {
+                  switchPlan(plan.id)
+                }}
+              >
+                <ListItemIcon>
+                  <BookmarkIcon />
+                </ListItemIcon>
+                <ListItemText
+                  disableTypography
+                  primary={
+                    <EllipsisTypography>{plan.title}</EllipsisTypography>
+                  }
+                />
+              </ListItem>
+            ))}
           </List>
         </Container>
       </Drawer>

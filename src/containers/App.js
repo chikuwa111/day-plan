@@ -5,8 +5,9 @@ import styled from 'styled-components'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import TouchBackend from 'react-dnd-touch-backend'
-import { fetchData } from '../lib/storage'
+import { fetchData, fetchPlanList } from '../lib/storage'
 import { initStore } from '../actions'
+import { updatePlanList } from '../actions/condition'
 import type { State } from '../types'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import blueGrey from '@material-ui/core/colors/blueGrey'
@@ -41,6 +42,7 @@ const theme = createMuiTheme({
 type Props = {|
   loading: boolean,
   initStore: () => void,
+  initPlanList: () => void,
 |}
 
 const mapStateToProps = (state: State) => ({
@@ -54,6 +56,11 @@ const mergeProps = (state, { dispatch }, ownProps): Props => ({
       dispatch(initStore(session, stock, plan))
     })
   },
+  initPlanList: () => {
+    fetchPlanList().then(planList => {
+      dispatch(updatePlanList(planList))
+    })
+  },
 })
 
 export default connect(
@@ -65,6 +72,7 @@ export default connect(
     class App extends React.PureComponent<Props> {
       componentDidMount() {
         this.props.initStore()
+        this.props.initPlanList()
       }
 
       render() {

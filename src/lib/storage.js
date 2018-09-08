@@ -2,7 +2,13 @@
 import localforage from 'localforage'
 import throttle from 'lodash/throttle'
 import type { Action } from '../actions'
-import type { State, SessionState, StockState, PlanState } from '../types'
+import type {
+  State,
+  SessionState,
+  StockState,
+  PlanState,
+  PlanList,
+} from '../types'
 
 const mainStorage = localforage.createInstance({ name: 'main' })
 const planStorage = localforage.createInstance({ name: 'plan' })
@@ -59,5 +65,17 @@ export const fetchData = async (): Promise<{|
     return { session, stock, plan }
   } catch (err) {
     return { session: null, stock: null, plan: null }
+  }
+}
+
+export const fetchPlanList = async (): Promise<PlanList> => {
+  let plans = []
+  try {
+    await planStorage.iterate((plan, id) => {
+      plans = [...plans, { id, title: plan.title }]
+    })
+    return plans
+  } catch (err) {
+    return plans
   }
 }

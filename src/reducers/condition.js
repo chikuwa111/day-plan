@@ -9,7 +9,7 @@ const initialState: ConditionState = {
     place: null,
     index: -1,
   },
-  plans: [],
+  planList: [],
 }
 
 const condition = (
@@ -21,6 +21,11 @@ const condition = (
       return {
         ...condition,
         loading: false,
+      }
+    case 'CONDITION__UPDATE_PLAN_LIST':
+      return {
+        ...condition,
+        planList: action.planList,
       }
     case 'SESSION__CHANGE_EDITING':
       return {

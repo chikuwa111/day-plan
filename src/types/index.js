@@ -13,7 +13,7 @@ export type ConditionState = {|
     place: TaskPlace,
     index: number,
   },
-  plans: Array<{| id: string, title: string |}>,
+  planList: PlanList,
 |}
 
 export type SessionState = {|
@@ -23,6 +23,8 @@ export type SessionState = {|
 export type StockState = Array<Task>
 
 export type PlanState = Plan
+
+export type PlanList = Array<{| id: string, title: string |}>
 
 export type Plan = {|
   title: string,
