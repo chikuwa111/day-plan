@@ -10,6 +10,7 @@ type InitAction = {
   session: ?SessionState,
   stock: ?StockState,
   plan: ?PlanState,
+  noPersist: true,
 }
 
 export const initStore = (
@@ -21,6 +22,7 @@ export const initStore = (
   session,
   stock,
   plan,
+  noPersist: true,
 })
 
 export type Action =

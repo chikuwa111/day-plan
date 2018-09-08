@@ -8,11 +8,13 @@ type UpdateLoadingAction = {
 type UpdatePlanListAction = {|
   type: 'CONDITION__UPDATE_PLAN_LIST',
   planList: PlanList,
+  noPersist: true,
 |}
 type UpdateEditingAction = {
   type: 'CONDITION__UPDATE_EDITING',
   place: TaskPlace,
   index: number,
+  noPersist: true,
 }
 
 export type ConditionAction =
@@ -29,6 +31,7 @@ export const updateLoading = (loading: boolean): UpdateLoadingAction => ({
 export const updatePlanList = (planList: PlanList): UpdatePlanListAction => ({
   type: 'CONDITION__UPDATE_PLAN_LIST',
   planList,
+  noPersist: true,
 })
 
 export const updateEditing = (
@@ -38,4 +41,5 @@ export const updateEditing = (
   type: 'CONDITION__UPDATE_EDITING',
   place,
   index,
+  noPersist: true,
 })
