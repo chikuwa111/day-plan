@@ -16,7 +16,7 @@ export type ConditionState = {|
 |}
 
 export type SessionState = {|
-  activePlanId: ?string,
+  activePlanId: string,
 |}
 
 export type StockState = Array<Task>

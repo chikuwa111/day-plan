@@ -4,7 +4,7 @@ import type { Action } from '../actions'
 import type { SessionState } from '../types'
 
 const initialState: SessionState = {
-  activePlanId: null,
+  activePlanId: nanoid(7),
 }
 
 const session = (
