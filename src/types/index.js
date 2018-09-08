@@ -8,6 +8,7 @@ export type State = {
 }
 
 export type ConditionState = {|
+  loading: boolean,
   editing: {
     place: TaskPlace,
     index: number,

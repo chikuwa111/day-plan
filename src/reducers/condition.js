@@ -4,6 +4,7 @@ import type { Action } from '../actions'
 import type { ConditionState } from '../types'
 
 const initialState: ConditionState = {
+  loading: true,
   editing: {
     place: null,
     index: -1,
@@ -16,6 +17,11 @@ const condition = (
   action: Action
 ): ConditionState => {
   switch (action.type) {
+    case 'INIT':
+      return {
+        ...condition,
+        loading: false,
+      }
     case 'SESSION__CHANGE_EDITING':
       return {
         ...condition,
@@ -46,7 +52,10 @@ const condition = (
     case 'PLAN__ADD':
     case 'PLAN__SWITCH':
     case 'PLAN__DESTROY':
-      return initialState
+      return {
+        ...condition,
+        editing: initialState.editing,
+      }
     default:
       return condition
   }
