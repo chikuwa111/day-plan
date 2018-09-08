@@ -1,22 +1,26 @@
 // @flow
 import localforage from 'localforage'
+import throttle from 'lodash/throttle'
 import type { Action } from '../actions'
 import type { State, SessionState, StockState, PlanState } from '../types'
 
 const mainStorage = localforage.createInstance({ name: 'main' })
 const planStorage = localforage.createInstance({ name: 'plan' })
 
-export const storageMiddleware = (store: any) => (next: Action => void) => (
-  action: Action
-) => {
-  next(action)
-
+const persistState = throttle(store => {
   const state: State = store.getState()
   Promise.all([
     mainStorage.setItem('session', state.session),
     mainStorage.setItem('stock', state.stock),
     planStorage.setItem(state.session.activePlanId, state.plan),
   ])
+}, 1000)
+
+export const storageMiddleware = (store: any) => (next: Action => void) => (
+  action: Action
+) => {
+  next(action)
+  persistState(store)
 }
 
 export const fetchData = async (): Promise<{|
