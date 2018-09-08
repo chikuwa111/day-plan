@@ -91,11 +91,4 @@ export const fetchPlan = async (id: string): Promise<PlanState> => {
 }
 
 export const removePlan = (id: string): Promise<void> =>
-  planStorage
-    .removeItem(id)
-    .then(() => {
-      console.log('delete')
-    })
-    .catch(err => {
-      console.log('error', err)
-    })
+  planStorage.removeItem(id)
