@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
 import { addTask, updateTask, destroyTask } from '../actions/task'
-import { changeEditing } from '../actions/session'
+import { updateEditing } from '../actions/condition'
 import Grid from '@material-ui/core/Grid'
 import Timeline from '../components/Timeline'
 import TaskComp from '../components/Task'
@@ -22,7 +22,7 @@ type Props = {|
   addTask: number => void,
   updateTask: (number, Task) => void,
   destroyTask: number => void,
-  changeEditing: (TaskPlace, number) => void,
+  updateEditing: (TaskPlace, number) => void,
 |}
 
 const mapStateToProps = (state: State) => ({
@@ -37,7 +37,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(
-    { addTask, updateTask, destroyTask, changeEditing },
+    { addTask, updateTask, destroyTask, updateEditing },
     dispatch
   ),
 })
@@ -55,7 +55,7 @@ export default connect(
       addTask,
       updateTask,
       destroyTask,
-      changeEditing,
+      updateEditing,
     } = props
 
     return (
@@ -100,7 +100,7 @@ export default connect(
                       destroyTask(index)
                     }}
                     closeEditing={() => {
-                      changeEditing(null, -1)
+                      updateEditing(null, -1)
                     }}
                   />
                 )
@@ -112,7 +112,7 @@ export default connect(
                     index={index}
                     task={task}
                     onClick={() => {
-                      changeEditing(TaskPlaces.TIMETABLE, index)
+                      updateEditing(TaskPlaces.TIMETABLE, index)
                     }}
                   />
                 )

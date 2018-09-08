@@ -32,7 +32,7 @@ const condition = (
         ...condition,
         planList: action.planList,
       }
-    case 'SESSION__CHANGE_EDITING':
+    case 'CONDITION__UPDATE_EDITING':
       return {
         ...condition,
         editing: {

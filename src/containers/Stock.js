@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
 import { addStock, updateStock, destroyStock } from '../actions/stock'
-import { changeEditing } from '../actions/session'
+import { updateEditing } from '../actions/condition'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import TaskComp from '../components/Task'
@@ -20,7 +20,7 @@ type Props = {|
   addStock: () => void,
   updateStock: (number, Task) => void,
   destroyStock: number => void,
-  changeEditing: (TaskPlace, number) => void,
+  updateEditing: (TaskPlace, number) => void,
 |}
 
 const mapStateToProps = (state: State) => ({
@@ -33,7 +33,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(
-    { addStock, updateStock, destroyStock, changeEditing },
+    { addStock, updateStock, destroyStock, updateEditing },
     dispatch
   ),
 })
@@ -49,7 +49,7 @@ export default connect(
       addStock,
       updateStock,
       destroyStock,
-      changeEditing,
+      updateEditing,
     } = props
 
     return (
@@ -69,7 +69,7 @@ export default connect(
                     destroyStock(index)
                   }}
                   closeEditing={() => {
-                    changeEditing(null, -1)
+                    updateEditing(null, -1)
                   }}
                 />
               ) : (
@@ -78,7 +78,7 @@ export default connect(
                   place={TaskPlaces.STOCK}
                   index={index}
                   onClick={() => {
-                    changeEditing(TaskPlaces.STOCK, index)
+                    updateEditing(TaskPlaces.STOCK, index)
                   }}
                 />
               )}

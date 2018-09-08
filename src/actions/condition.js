@@ -1,5 +1,5 @@
 // @flow
-import type { PlanList } from '../types'
+import type { PlanList, TaskPlace } from '../types'
 type UpdateLoadingAction = {
   type: 'CONDITION__UPDATE_LOADING',
   loading: boolean,
@@ -9,8 +9,16 @@ type UpdatePlanListAction = {|
   type: 'CONDITION__UPDATE_PLAN_LIST',
   planList: PlanList,
 |}
+type UpdateEditingAction = {
+  type: 'CONDITION__UPDATE_EDITING',
+  place: TaskPlace,
+  index: number,
+}
 
-export type ConditionAction = UpdateLoadingAction | UpdatePlanListAction
+export type ConditionAction =
+  | UpdateLoadingAction
+  | UpdatePlanListAction
+  | UpdateEditingAction
 
 export const updateLoading = (loading: boolean): UpdateLoadingAction => ({
   type: 'CONDITION__UPDATE_LOADING',
@@ -21,4 +29,13 @@ export const updateLoading = (loading: boolean): UpdateLoadingAction => ({
 export const updatePlanList = (planList: PlanList): UpdatePlanListAction => ({
   type: 'CONDITION__UPDATE_PLAN_LIST',
   planList,
+})
+
+export const updateEditing = (
+  place: TaskPlace,
+  index: number
+): UpdateEditingAction => ({
+  type: 'CONDITION__UPDATE_EDITING',
+  place,
+  index,
 })

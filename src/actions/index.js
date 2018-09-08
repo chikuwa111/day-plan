@@ -3,7 +3,6 @@ import type { SessionState, StockState, PlanState } from '../types'
 import type { PlanAction } from './plan'
 import type { TaskAction } from './task'
 import type { StockAction } from './stock'
-import type { SessionAction } from './session'
 import type { ConditionAction } from './condition'
 
 type InitAction = {
@@ -29,5 +28,4 @@ export type Action =
   | PlanAction
   | TaskAction
   | StockAction
-  | SessionAction
   | ConditionAction
