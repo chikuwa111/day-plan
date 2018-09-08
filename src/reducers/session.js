@@ -12,6 +12,8 @@ const session = (
   action: Action
 ): SessionState => {
   switch (action.type) {
+    case 'INIT':
+      return action.session || session
     case 'PLAN__ADD':
       return {
         activePlanId: nanoid(7),
@@ -24,3 +26,5 @@ const session = (
       return session
   }
 }
+
+export default session

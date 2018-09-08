@@ -1,10 +1,12 @@
 // @flow
 import * as React from 'react'
-import pure from 'recompose/pure'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import TouchBackend from 'react-dnd-touch-backend'
+import { fetchData } from '../lib/storage'
+import { initStore } from '../actions'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import blueGrey from '@material-ui/core/colors/blueGrey'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -34,26 +36,51 @@ const theme = createMuiTheme({
   },
 })
 
-export default DragDropContext(Backend)(
-  pure(function App() {
-    return (
-      <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <TopBar />
-        <RootGrid container spacing={16}>
-          <GridWrapper item xs={12} sm={8}>
-            <TimeTable />
-          </GridWrapper>
-          <Hidden xsDown>
-            <GridWrapper item xs={12} sm={4}>
-              <MarginDiv />
-              <Stock />
-            </GridWrapper>
-          </Hidden>
-        </RootGrid>
-      </MuiThemeProvider>
-    )
-  })
+type Props = {|
+  initStore: () => void,
+|}
+
+const mapDispatchToProps = dispatch => ({ dispatch })
+const mergeProps = (state, { dispatch }, ownProps): Props => ({
+  initStore: () => {
+    fetchData().then(({ session, stock, plan }) => {
+      dispatch(initStore(session, stock, plan))
+    })
+  },
+})
+
+export default connect(
+  null,
+  mapDispatchToProps,
+  mergeProps
+)(
+  DragDropContext(Backend)(
+    class App extends React.PureComponent<Props> {
+      componentDidMount() {
+        this.props.initStore()
+      }
+
+      render() {
+        return (
+          <MuiThemeProvider theme={theme}>
+            <CssBaseline />
+            <TopBar />
+            <RootGrid container spacing={16}>
+              <GridWrapper item xs={12} sm={8}>
+                <TimeTable />
+              </GridWrapper>
+              <Hidden xsDown>
+                <GridWrapper item xs={12} sm={4}>
+                  <MarginDiv />
+                  <Stock />
+                </GridWrapper>
+              </Hidden>
+            </RootGrid>
+          </MuiThemeProvider>
+        )
+      }
+    }
+  )
 )
 
 const RootGrid = styled(Grid)`

@@ -24,6 +24,8 @@ const stock = (
   action: Action
 ): StockState => {
   switch (action.type) {
+    case 'INIT':
+      return action.stock || stock
     case 'STOCK__ADD':
       return [newTask(), ...stock]
     case 'STOCK__UPDATE':

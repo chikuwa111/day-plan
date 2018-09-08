@@ -1,24 +1,15 @@
 // @flow
 import { applyMiddleware, createStore } from 'redux'
-import { persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
 import reducers from '../reducers'
 import gaMiddleware from '../lib/gaMiddleware'
+import { storageMiddleware } from '../lib/storage'
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  version: 1,
-  blacklist: ['session'],
-}
-const persistedReducer = persistReducer(persistConfig, reducers)
-
-let middleware = [gaMiddleware]
+let middleware = [gaMiddleware, storageMiddleware]
 if (process.env.NODE_ENV !== 'production') {
   const logger = require('redux-logger').default
   middleware = [...middleware, logger]
 }
 
-const store = createStore(persistedReducer, applyMiddleware(...middleware))
+const store = createStore(reducers, applyMiddleware(...middleware))
 
 export default store

@@ -2,12 +2,14 @@
 import { newTask, newEmptyTasks, newPlan, move } from '../lib/task'
 import { TutorialPlan } from '../constants'
 import type { Action } from '../actions'
-import type { PlanState, Plan, Task } from '../types'
+import type { PlanState } from '../types'
 
 const initialState: PlanState = TutorialPlan
 
 const plan = (plan: PlanState = initialState, action: Action): PlanState => {
   switch (action.type) {
+    case 'INIT':
+      return action.plan || plan
     case 'PLAN__SWITCH':
       // persistはいらない
       return action.plan
