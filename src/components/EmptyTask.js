@@ -8,14 +8,18 @@ import DropTarget from '../containers/DropTarget'
 type Props = {|
   place: TaskPlace,
   index: number,
-  onClick: () => void,
+  addTask: (index: number) => void,
 |}
 
 export default pure(function EmptyTask(props: Props) {
-  const { place, index, onClick } = props
+  const { place, index, addTask } = props
 
   return (
-    <Container onClick={onClick}>
+    <Container
+      onClick={() => {
+        addTask(index)
+      }}
+    >
       <Wrapper>
         <Body>+</Body>
       </Wrapper>

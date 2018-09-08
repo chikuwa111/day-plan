@@ -74,9 +74,7 @@ export default connect(
                     key={index}
                     place={TaskPlaces.TIMETABLE}
                     index={index}
-                    onClick={() => {
-                      addTask(index)
-                    }}
+                    addTask={addTask}
                   />
                 )
               } else if (editingIndex != null && editingIndex === index) {

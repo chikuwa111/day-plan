@@ -52,10 +52,12 @@ export default connect(
       updateEditing,
     } = props
 
+    console.log('render stock')
+
     return (
       <ContainerPaper>
         <Grid container direction="column" spacing={8}>
-          <EmptyTask place={TaskPlaces.STOCK} index={0} onClick={addStock} />
+          <EmptyTask place={TaskPlaces.STOCK} index={0} addTask={addStock} />
           {tasks.map((task, index) => (
             <Grid item key={task.id}>
               {editingIndex != null && editingIndex === index ? (
