@@ -6,7 +6,12 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
-import { addTask, updateTask, destroyTask } from '../actions/task'
+import {
+  addTask,
+  updateTask,
+  updateTaskById,
+  destroyTask,
+} from '../actions/task'
 import { updateEditing } from '../actions/condition'
 import Grid from '@material-ui/core/Grid'
 import Timeline from '../components/Timeline'
@@ -21,6 +26,7 @@ type Props = {|
   editingIndex: number,
   addTask: number => void,
   updateTask: (number, Task) => void,
+  updateTaskById: Task => void,
   destroyTask: number => void,
   updateEditing: (TaskPlace, number) => void,
 |}
@@ -37,7 +43,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(
-    { addTask, updateTask, destroyTask, updateEditing },
+    { addTask, updateTask, updateTaskById, destroyTask, updateEditing },
     dispatch
   ),
 })
@@ -54,6 +60,7 @@ export default connect(
       editingIndex,
       addTask,
       updateTask,
+      updateTaskById,
       destroyTask,
       updateEditing,
     } = props
@@ -94,6 +101,7 @@ export default connect(
                     onChange={(task: Task) => {
                       updateTask(index, task)
                     }}
+                    updateTaskById={updateTaskById}
                     onDestroy={() => {
                       destroyTask(index)
                     }}

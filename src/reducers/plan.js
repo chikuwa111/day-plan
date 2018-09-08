@@ -72,8 +72,7 @@ const plan = (plan: PlanState = initialState, action: Action): PlanState => {
       }
     case 'TASK__UPDATE': {
       const task = plan.tasks[action.index]
-      if (task == null) {
-        console.error('Unexpected TASKS_UPDATE')
+      if (task == null || task.id !== action.task.id) {
         return plan
       }
       const lengthDiffSize = (action.task.length - task.length) / 30
@@ -96,6 +95,25 @@ const plan = (plan: PlanState = initialState, action: Action): PlanState => {
             ...plan.tasks.slice(action.index + 1),
           ],
         }
+      }
+    }
+    case 'TASK__UPDATE_BY_ID': {
+      const { id, body, color } = action.task
+      const index = plan.tasks.findIndex(task => task != null && task.id === id)
+      if (index === -1) {
+        return plan
+      }
+      return {
+        ...plan,
+        tasks: [
+          ...plan.tasks.slice(0, index),
+          {
+            ...plan.tasks[index],
+            body,
+            color,
+          },
+          ...plan.tasks.slice(index + 1),
+        ],
       }
     }
     case 'TASK__DESTROY': {

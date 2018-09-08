@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
 import { addStock, updateStock, destroyStock } from '../actions/stock'
+import { updateTaskById } from '../actions/task'
 import { updateEditing } from '../actions/condition'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
@@ -19,6 +20,7 @@ type Props = {|
   editingIndex: ?number,
   addStock: () => void,
   updateStock: (number, Task) => void,
+  updateTaskById: Task => void,
   destroyStock: number => void,
   updateEditing: (TaskPlace, number) => void,
 |}
@@ -33,7 +35,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(
-    { addStock, updateStock, destroyStock, updateEditing },
+    { addStock, updateStock, updateTaskById, destroyStock, updateEditing },
     dispatch
   ),
 })
@@ -48,11 +50,10 @@ export default connect(
       editingIndex,
       addStock,
       updateStock,
+      updateTaskById,
       destroyStock,
       updateEditing,
     } = props
-
-    console.log('render stock')
 
     return (
       <ContainerPaper>
@@ -67,6 +68,7 @@ export default connect(
                   onChange={(task: Task) => {
                     updateStock(index, task)
                   }}
+                  updateTaskById={updateTaskById}
                   onDestroy={() => {
                     destroyStock(index)
                   }}

@@ -15,18 +15,52 @@ type Props = {|
   task: Task,
   maxLength: ?number,
   onChange: Task => void,
+  updateTaskById: Task => void,
   onDestroy: () => void,
   closeEditing: () => void,
 |}
 
-export default class EditingTask extends React.PureComponent<Props> {
+type State = {|
+  // lengthは逐次更新したいためstateで管理しない
+  body: string,
+  color: string,
+|}
+
+export default class EditingTask extends React.PureComponent<Props, State> {
   container: ?HTMLElement
+
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      body: this.props.task.body,
+      color: this.props.task.color,
+    }
+  }
 
   handleClick = (e: MouseEvent | TouchEvent) => {
     // FIXME flow
     const target: any = e.target
     const container = this.container
     if (container && !container.contains(target)) this.props.closeEditing()
+  }
+
+  onBodyChange = (e: SyntheticInputEvent<*>) => {
+    this.setState({ body: e.target.value })
+  }
+
+  onColorChange = (e: SyntheticInputEvent<*>) => {
+    this.setState({ color: e.target.value })
+  }
+
+  onLengthChange = (e: SyntheticInputEvent<*>) => {
+    const { body, color } = this.state
+    const length = Number(e.target.value)
+    this.props.onChange({
+      ...this.props.task,
+      body,
+      color,
+      length,
+    })
   }
 
   componentDidMount() {
@@ -36,10 +70,19 @@ export default class EditingTask extends React.PureComponent<Props> {
   componentWillUnmount() {
     document.removeEventListener('touchend', this.handleClick, true)
     document.removeEventListener('click', this.handleClick, true)
+    this.props.updateTaskById({
+      ...this.props.task,
+      body: this.state.body,
+      color: this.state.color,
+    })
   }
 
   render() {
-    const { task, maxLength, onChange, onDestroy, closeEditing } = this.props
+    const { task, maxLength, onDestroy, closeEditing } = this.props
+    const { length } = task
+    const { body, color } = this.state
+
+    console.log('render editing task')
 
     const availableLengths =
       maxLength == null
@@ -57,27 +100,13 @@ export default class EditingTask extends React.PureComponent<Props> {
       >
         <Container task={task}>
           <InputWrapper>
-            <Input
-              autoFocus
-              value={task.body}
-              onChange={e => {
-                onChange({
-                  ...task,
-                  body: e.target.value,
-                })
-              }}
-            />
+            <Input autoFocus value={body} onChange={this.onBodyChange} />
           </InputWrapper>
           <SelectWrapper>
             <SelectIcon>
               <ScheduleIcon />
             </SelectIcon>
-            <Select
-              value={task.length}
-              onChange={e => {
-                onChange({ ...task, length: Number(e.target.value) })
-              }}
-            >
+            <Select value={length} onChange={this.onLengthChange}>
               {availableLengths.map(length => (
                 <option key={length} value={length}>
                   {length} min
@@ -89,12 +118,7 @@ export default class EditingTask extends React.PureComponent<Props> {
             <SelectIcon>
               <ColorLensIcon />
             </SelectIcon>
-            <Select
-              value={task.color}
-              onChange={e => {
-                onChange({ ...task, color: e.target.value })
-              }}
-            >
+            <Select value={color} onChange={this.onColorChange}>
               {Colors.map(([name, color]) => (
                 <option key={name} value={color}>
                   {name}
