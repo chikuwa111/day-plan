@@ -1,7 +1,6 @@
 // @flow
 import type { Plan } from '../types'
 type AddAction = { type: 'PLAN__ADD' }
-type DestroyAction = { type: 'PLAN__DESTROY' }
 type SwitchAction = { type: 'PLAN__SWITCH', id: string, plan: Plan }
 type UpdateTitleAction = { type: 'PLAN__UPDATE_TITLE', title: string }
 type UpdateTimeAction = {
@@ -16,7 +15,6 @@ type UpdateCloudIdAction = {
 
 export type PlanAction =
   | AddAction
-  | DestroyAction
   | SwitchAction
   | UpdateTitleAction
   | UpdateTimeAction
@@ -24,10 +22,6 @@ export type PlanAction =
 
 export const addPlan = (): AddAction => ({
   type: 'PLAN__ADD',
-})
-
-export const destroyPlan = (): DestroyAction => ({
-  type: 'PLAN__DESTROY',
 })
 
 export const switchPlan = (id: string, plan: Plan): SwitchAction => ({

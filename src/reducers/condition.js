@@ -65,7 +65,6 @@ const condition = (
         editing: initialState.editing,
       }
     case 'PLAN__SWITCH':
-    case 'PLAN__DESTROY':
       return {
         ...condition,
         loading: false,

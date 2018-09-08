@@ -27,6 +27,7 @@ export const storageMiddleware = (store: any) => (next: Action => void) => (
   action: Action
 ) => {
   next(action)
+  if (action.noPersist) return
   persistState(store)
 }
 
@@ -88,3 +89,13 @@ export const fetchPlan = async (id: string): Promise<PlanState> => {
     return newPlan()
   }
 }
+
+export const removePlan = (id: string): Promise<void> =>
+  planStorage
+    .removeItem(id)
+    .then(() => {
+      console.log('delete')
+    })
+    .catch(err => {
+      console.log('error', err)
+    })

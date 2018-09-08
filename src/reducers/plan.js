@@ -15,10 +15,6 @@ const plan = (plan: PlanState = initialState, action: Action): PlanState => {
       return action.plan
     case 'PLAN__ADD':
       return newPlan()
-    case 'PLAN__DESTROY':
-      // 呼び出し側でstorage内の削除とPLAN__ADDかPLAN__SWITCHを実行させる
-      // このアクションは廃止
-      return plan
     case 'PLAN__UPDATE_TITLE':
       return {
         ...plan,
