@@ -109,9 +109,7 @@ export default connect(
                     place={TaskPlaces.TIMETABLE}
                     index={index}
                     task={task}
-                    onClick={() => {
-                      updateEditing(TaskPlaces.TIMETABLE, index)
-                    }}
+                    updateEditing={updateEditing}
                   />
                 )
               }

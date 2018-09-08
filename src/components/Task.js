@@ -12,7 +12,7 @@ type Props = {|
   task: Task,
   place: TaskPlace,
   index: number,
-  onClick: () => void,
+  updateEditing: (TaskPlace, number) => void,
 
   connectDragSource: Function,
   isDragging: boolean,
@@ -35,7 +35,17 @@ const collect = (connect, monitor) => ({
 
 export default DragSource('TASK', dragSource, collect)(
   pure(function Task(props: Props) {
-    const { task, place, index, onClick, connectDragSource, isDragging } = props
+    const {
+      task,
+      place,
+      index,
+      updateEditing,
+      connectDragSource,
+      isDragging,
+    } = props
+    const onClick = () => {
+      updateEditing(place, index)
+    }
 
     return connectDragSource(
       <div style={wrapperStyle} onClick={onClick}>

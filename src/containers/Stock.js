@@ -79,9 +79,7 @@ export default connect(
                   task={task}
                   place={TaskPlaces.STOCK}
                   index={index}
-                  onClick={() => {
-                    updateEditing(TaskPlaces.STOCK, index)
-                  }}
+                  updateEditing={updateEditing}
                 />
               )}
             </Grid>
