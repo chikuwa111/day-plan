@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import pure from 'recompose/pure'
 import type { State, PlanList } from '../types'
 import { addPlan, switchPlan } from '../actions/plan'
-import { updateLoading } from '../actions/condition'
-import { fetchPlan } from '../lib/storage'
+import { updateLoading, updatePlanList } from '../actions/condition'
+import { fetchPlan, fetchPlanList } from '../lib/storage'
 import Drawer from '@material-ui/core/Drawer'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
@@ -38,11 +38,21 @@ const mergeProps = (state, { dispatch }, ownProps): Props => ({
   planList: state.planList.filter(plan => plan.id !== state.activePlanId),
   onClickAdd: () => {
     dispatch(addPlan())
+    setTimeout(() => {
+      fetchPlanList().then(planList => {
+        dispatch(updatePlanList(planList))
+      })
+    }, 1500)
   },
   onClickSwitch: (id: string) => () => {
     dispatch(updateLoading(true))
     fetchPlan(id).then(plan => {
       dispatch(switchPlan(id, plan))
+      setTimeout(() => {
+        fetchPlanList().then(planList => {
+          dispatch(updatePlanList(planList))
+        })
+      }, 1500)
     })
   },
 })
