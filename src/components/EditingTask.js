@@ -15,7 +15,6 @@ type Props = {|
   task: Task,
   maxLength: ?number,
   onChange: Task => void,
-  updateTaskById: Task => void,
   onDestroy: () => void,
   closeEditing: () => void,
 |}
@@ -70,7 +69,7 @@ export default class EditingTask extends React.PureComponent<Props, State> {
   componentWillUnmount() {
     document.removeEventListener('touchend', this.handleClick, true)
     document.removeEventListener('click', this.handleClick, true)
-    this.props.updateTaskById({
+    this.props.onChange({
       ...this.props.task,
       body: this.state.body,
       color: this.state.color,
@@ -81,8 +80,6 @@ export default class EditingTask extends React.PureComponent<Props, State> {
     const { task, maxLength, onDestroy, closeEditing } = this.props
     const { length } = task
     const { body, color } = this.state
-
-    console.log('render editing task')
 
     const availableLengths =
       maxLength == null
@@ -98,7 +95,7 @@ export default class EditingTask extends React.PureComponent<Props, State> {
           closeEditing()
         }}
       >
-        <Container task={task}>
+        <Container length={length} color={color}>
           <InputWrapper>
             <Input autoFocus value={body} onChange={this.onBodyChange} />
           </InputWrapper>
@@ -139,9 +136,9 @@ const Container = styled(Card)`
   && {
     width: 100%;
     padding-left: 2%;
-    height: ${props => props.task.length / 15}rem;
-    background-color: ${props => props.task.color};
-    font-size: ${props => 0.8 + props.task.length / 150}rem;
+    height: ${props => props.length / 15}rem;
+    background-color: ${props => props.color};
+    font-size: ${props => 0.8 + props.length / 150}rem;
     display: flex;
     align-items: center;
   }

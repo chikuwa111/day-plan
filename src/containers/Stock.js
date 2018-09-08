@@ -6,8 +6,8 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 import { TaskPlaces } from '../constants'
 import type { State, Task, TaskPlace } from '../types'
-import { addStock, updateStock, destroyStock } from '../actions/stock'
-import { updateTaskById } from '../actions/task'
+import { addStock, destroyStock } from '../actions/stock'
+import { updateTask } from '../actions/task'
 import { updateEditing } from '../actions/condition'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
@@ -19,8 +19,7 @@ type Props = {|
   tasks: Array<Task>,
   editingIndex: ?number,
   addStock: () => void,
-  updateStock: (number, Task) => void,
-  updateTaskById: Task => void,
+  updateTask: Task => void,
   destroyStock: number => void,
   updateEditing: (TaskPlace, number) => void,
 |}
@@ -35,7 +34,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(
-    { addStock, updateStock, updateTaskById, destroyStock, updateEditing },
+    { addStock, updateTask, destroyStock, updateEditing },
     dispatch
   ),
 })
@@ -49,8 +48,7 @@ export default connect(
       tasks,
       editingIndex,
       addStock,
-      updateStock,
-      updateTaskById,
+      updateTask,
       destroyStock,
       updateEditing,
     } = props
@@ -65,10 +63,7 @@ export default connect(
                 <EditingTask
                   task={task}
                   maxLength={null}
-                  onChange={(task: Task) => {
-                    updateStock(index, task)
-                  }}
-                  updateTaskById={updateTaskById}
+                  onChange={updateTask}
                   onDestroy={() => {
                     destroyStock(index)
                   }}

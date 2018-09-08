@@ -2,8 +2,7 @@
 import type { Task, TaskPlace } from '../types'
 
 type AddAction = { type: 'TASK__ADD', index: number }
-type UpdateAction = { type: 'TASK__UPDATE', index: number, task: Task }
-type UpdateByIdAction = { type: 'TASK__UPDATE_BY_ID', task: Task }
+type UpdateAction = { type: 'TASK__UPDATE', task: Task }
 type DestroyAction = { type: 'TASK__DESTROY', index: number }
 type MoveAction = {
   type: 'TASK__MOVE',
@@ -16,26 +15,15 @@ type MoveAction = {
   toOffset: number,
 }
 
-export type TaskAction =
-  | AddAction
-  | UpdateAction
-  | UpdateByIdAction
-  | DestroyAction
-  | MoveAction
+export type TaskAction = AddAction | UpdateAction | DestroyAction | MoveAction
 
 export const addTask = (index: number): AddAction => ({
   type: 'TASK__ADD',
   index,
 })
 
-export const updateTask = (index: number, task: Task): UpdateAction => ({
+export const updateTask = (task: Task): UpdateAction => ({
   type: 'TASK__UPDATE',
-  index,
-  task,
-})
-
-export const updateTaskById = (task: Task): UpdateByIdAction => ({
-  type: 'TASK__UPDATE_BY_ID',
   task,
 })
 

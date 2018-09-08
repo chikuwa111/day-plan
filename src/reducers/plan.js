@@ -11,7 +11,6 @@ const plan = (plan: PlanState = initialState, action: Action): PlanState => {
     case 'INIT':
       return action.plan || plan
     case 'PLAN__SWITCH':
-      // persistはいらない
       return action.plan
     case 'PLAN__ADD':
       return newPlan()
@@ -71,8 +70,10 @@ const plan = (plan: PlanState = initialState, action: Action): PlanState => {
         ],
       }
     case 'TASK__UPDATE': {
-      const task = plan.tasks[action.index]
-      if (task == null || task.id !== action.task.id) {
+      const { id } = action.task
+      const index = plan.tasks.findIndex(task => task != null && task.id === id)
+      const task = plan.tasks[index]
+      if (task == null) {
         return plan
       }
       const lengthDiffSize = (action.task.length - task.length) / 30
@@ -80,46 +81,26 @@ const plan = (plan: PlanState = initialState, action: Action): PlanState => {
         return {
           ...plan,
           tasks: [
-            ...plan.tasks.slice(0, action.index),
+            ...plan.tasks.slice(0, index),
             action.task,
-            ...plan.tasks.slice(action.index + lengthDiffSize + 1),
+            ...plan.tasks.slice(index + lengthDiffSize + 1),
           ],
         }
       } else {
         return {
           ...plan,
           tasks: [
-            ...plan.tasks.slice(0, action.index),
+            ...plan.tasks.slice(0, index),
             action.task,
             ...newEmptyTasks(-1 * lengthDiffSize),
-            ...plan.tasks.slice(action.index + 1),
+            ...plan.tasks.slice(index + 1),
           ],
         }
-      }
-    }
-    case 'TASK__UPDATE_BY_ID': {
-      const { id, body, color } = action.task
-      const index = plan.tasks.findIndex(task => task != null && task.id === id)
-      if (index === -1) {
-        return plan
-      }
-      return {
-        ...plan,
-        tasks: [
-          ...plan.tasks.slice(0, index),
-          {
-            ...plan.tasks[index],
-            body,
-            color,
-          },
-          ...plan.tasks.slice(index + 1),
-        ],
       }
     }
     case 'TASK__DESTROY': {
       const task = plan.tasks[action.index]
       if (task == null) {
-        console.error('Unexpected TASKS__DESTROY')
         return plan
       }
       const destroySize = task.length / 30
