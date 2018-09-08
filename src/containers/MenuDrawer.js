@@ -28,8 +28,8 @@ type Props = {|
 |}
 
 const mapStateToProps = (state: State) => ({
-  plans: state.plans.plans,
-  active: state.plans.active,
+  plans: state.condition.plans,
+  active: state.session.activePlanId,
 })
 
 const mapDispatchToProps = dispatch => ({

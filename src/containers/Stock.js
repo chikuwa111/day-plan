@@ -26,8 +26,8 @@ type Props = {|
 const mapStateToProps = (state: State) => ({
   tasks: state.stock,
   editingIndex:
-    state.session.editing.place === TaskPlaces.STOCK
-      ? state.session.editing.index
+    state.condition.editing.place === TaskPlaces.STOCK
+      ? state.condition.editing.index
       : null,
 })
 

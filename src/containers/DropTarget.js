@@ -36,12 +36,9 @@ type Props = {|
   fromOffset: number,
 |}
 
-const mapStateToProps = (state: State) => {
-  const plan = state.plans.plans[state.plans.active]
-  return {
-    tasks: plan.tasks,
-  }
-}
+const mapStateToProps = (state: State) => ({
+  tasks: state.plan.tasks,
+})
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators({ moveTask }, dispatch),

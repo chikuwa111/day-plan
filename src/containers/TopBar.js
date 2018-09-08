@@ -23,12 +23,9 @@ type TopBarState = {|
   openDialog: '' | 'setting' | 'share',
 |}
 
-const mapStateToProps = (state: State) => {
-  const activePlan = state.plans.plans[state.plans.active]
-  return {
-    title: activePlan.title,
-  }
-}
+const mapStateToProps = (state: State) => ({
+  title: state.plan.title,
+})
 
 export default connect(mapStateToProps)(
   class TopBar extends React.PureComponent<Props, TopBarState> {

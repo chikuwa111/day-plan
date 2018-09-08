@@ -25,18 +25,15 @@ type Props = {|
   changeEditing: (TaskPlace, number) => void,
 |}
 
-const mapStateToProps = (state: State) => {
-  const plan = state.plans.plans[state.plans.active]
-  return {
-    start: plan.start,
-    end: plan.end,
-    tasks: plan.tasks,
-    editingIndex:
-      state.session.editing.place === TaskPlaces.TIMETABLE
-        ? state.session.editing.index
-        : null,
-  }
-}
+const mapStateToProps = (state: State) => ({
+  start: state.plan.start,
+  end: state.plan.end,
+  tasks: state.plan.tasks,
+  editingIndex:
+    state.condition.editing.place === TaskPlaces.TIMETABLE
+      ? state.condition.editing.index
+      : null,
+})
 
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(

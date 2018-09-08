@@ -1,7 +1,8 @@
 // @flow
+import type { Plan } from '../types'
 type AddAction = { type: 'PLAN__ADD' }
 type DestroyAction = { type: 'PLAN__DESTROY' }
-type SwitchAction = { type: 'PLAN__SWITCH', id: string }
+type SwitchAction = { type: 'PLAN__SWITCH', id: string, plan: Plan }
 type UpdateTitleAction = { type: 'PLAN__UPDATE_TITLE', title: string }
 type UpdateTimeAction = {
   type: 'PLAN__UPDATE_TIME',
@@ -29,9 +30,10 @@ export const destroyPlan = (): DestroyAction => ({
   type: 'PLAN__DESTROY',
 })
 
-export const switchPlan = (id: string): SwitchAction => ({
+export const switchPlan = (id: string, plan: Plan): SwitchAction => ({
   type: 'PLAN__SWITCH',
   id,
+  plan,
 })
 
 export const updateTitle = (title: string): UpdateTitleAction => ({

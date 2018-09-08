@@ -27,7 +27,7 @@ type Props = {|
 |}
 
 const mapStateToProps = (state: State) => ({
-  plan: state.plans.plans[state.plans.active],
+  plan: state.plan,
 })
 
 const mapDispatchToProps = dispatch => ({

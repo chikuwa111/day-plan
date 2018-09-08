@@ -1,13 +1,10 @@
 // @flow
-import { TaskPlaces } from '../constants'
+import nanoid from 'nanoid'
 import type { Action } from '../actions'
 import type { SessionState } from '../types'
 
 const initialState: SessionState = {
-  editing: {
-    place: null,
-    index: -1,
-  },
+  activePlanId: null,
 }
 
 const session = (
@@ -15,39 +12,15 @@ const session = (
   action: Action
 ): SessionState => {
   switch (action.type) {
-    case 'SESSION__CHANGE_EDITING':
+    case 'PLAN__ADD':
       return {
-        ...session,
-        editing: {
-          place: action.place,
-          index: action.index,
-        },
+        activePlanId: nanoid(7),
       }
-    case 'TASK__ADD':
+    case 'PLAN__SWITCH':
       return {
-        ...session,
-        editing: {
-          place: TaskPlaces.TIMETABLE,
-          index: action.index,
-        },
+        activePlanId: action.id,
       }
-    case 'TASK__DESTROY':
-      return initialState
-    case 'STOCK__ADD':
-      return {
-        ...session,
-        editing: {
-          place: TaskPlaces.STOCK,
-          index: 0,
-        },
-      }
-    case 'STOCK__DESTROY':
-      return initialState
-    case 'TASK__MOVE':
-      return initialState
     default:
       return session
   }
 }
-
-export default session
