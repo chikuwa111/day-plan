@@ -42,7 +42,6 @@ const theme = createMuiTheme({
 type Props = {|
   loading: boolean,
   initStore: () => void,
-  initPlanList: () => void,
 |}
 
 const mapStateToProps = (state: State) => ({
@@ -54,11 +53,9 @@ const mergeProps = (state, { dispatch }, ownProps): Props => ({
   initStore: () => {
     fetchData().then(({ session, stock, plan }) => {
       dispatch(initStore(session, stock, plan))
-    })
-  },
-  initPlanList: () => {
-    fetchPlanList().then(planList => {
-      dispatch(updatePlanList(planList))
+      fetchPlanList().then(planList => {
+        dispatch(updatePlanList(planList))
+      })
     })
   },
 })
@@ -72,7 +69,6 @@ export default connect(
     class App extends React.PureComponent<Props> {
       componentDidMount() {
         this.props.initStore()
-        this.props.initPlanList()
       }
 
       render() {
