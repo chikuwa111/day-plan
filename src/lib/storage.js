@@ -1,6 +1,7 @@
 // @flow
 import localforage from 'localforage'
 import throttle from 'lodash/throttle'
+import { newPlan } from '../lib/task'
 import type { Action } from '../actions'
 import type {
   State,
@@ -77,5 +78,13 @@ export const fetchPlanList = async (): Promise<PlanList> => {
     return plans
   } catch (err) {
     return plans
+  }
+}
+
+export const fetchPlan = async (id: string): Promise<PlanState> => {
+  try {
+    return await planStorage.getItem(id)
+  } catch (err) {
+    return newPlan()
   }
 }

@@ -1,11 +1,12 @@
 // @flow
 import * as React from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import pure from 'recompose/pure'
 import type { State, PlanList } from '../types'
 import { addPlan, switchPlan } from '../actions/plan'
+import { updateLoading } from '../actions/condition'
+import { fetchPlan } from '../lib/storage'
 import Drawer from '@material-ui/core/Drawer'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
@@ -22,32 +23,43 @@ type Props = {|
   onClose: () => void,
 
   planList: PlanList,
-  activePlanId: string,
-  addPlan: () => void,
-  switchPlan: string => void,
+  onClickAdd: () => void,
+  onClickSwitch: string => () => void,
 |}
 
 const mapStateToProps = (state: State) => ({
   planList: state.condition.planList,
   activePlanId: state.session.activePlanId,
 })
-
-const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ addPlan, switchPlan }, dispatch),
+const mapDispatchToProps = dispatch => ({ dispatch })
+const mergeProps = (state, { dispatch }, ownProps): Props => ({
+  open: ownProps.open,
+  onClose: ownProps.onClose,
+  planList: state.planList.filter(plan => plan.id !== state.activePlanId),
+  onClickAdd: () => {
+    dispatch(addPlan())
+  },
+  onClickSwitch: (id: string) => () => {
+    dispatch(updateLoading(true))
+    fetchPlan(id).then(plan => {
+      dispatch(switchPlan(id, plan))
+    })
+  },
 })
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(
   pure(function MenuDrawer(props: Props) {
-    const { open, onClose, planList, activePlanId, addPlan, switchPlan } = props
+    const { open, onClose, planList, onClickAdd, onClickSwitch } = props
 
     return (
       <Drawer anchor="left" open={open} onClose={onClose}>
         <Container onClick={onClose}>
           <List>
-            <ListItem button onClick={addPlan}>
+            <ListItem button onClick={onClickAdd}>
               <ListItemIcon>
                 <AddBoxIcon />
               </ListItemIcon>
@@ -60,14 +72,8 @@ export default connect(
               <ListSubheader component="div">Other plans</ListSubheader>
             }
           >
-            {planList.filter(plan => plan.id !== activePlanId).map(plan => (
-              <ListItem
-                button
-                key={plan.id}
-                onClick={() => {
-                  switchPlan(plan.id)
-                }}
-              >
+            {planList.map(plan => (
+              <ListItem button key={plan.id} onClick={onClickSwitch(plan.id)}>
                 <ListItemIcon>
                   <BookmarkIcon />
                 </ListItemIcon>

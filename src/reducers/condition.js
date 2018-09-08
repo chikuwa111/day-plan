@@ -22,6 +22,11 @@ const condition = (
         ...condition,
         loading: false,
       }
+    case 'CONDITION__UPDATE_LOADING':
+      return {
+        ...condition,
+        loading: action.loading,
+      }
     case 'CONDITION__UPDATE_PLAN_LIST':
       return {
         ...condition,
@@ -55,10 +60,15 @@ const condition = (
     case 'TASK__DESTROY':
     case 'STOCK__DESTROY':
     case 'PLAN__ADD':
+      return {
+        ...condition,
+        editing: initialState.editing,
+      }
     case 'PLAN__SWITCH':
     case 'PLAN__DESTROY':
       return {
         ...condition,
+        loading: false,
         editing: initialState.editing,
       }
     default:
