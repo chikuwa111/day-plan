@@ -3,7 +3,7 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import pure from 'recompose/pure'
 import styled from 'styled-components'
-import { deletePlan } from '../lib/firebase'
+// import { deletePlan } from '../lib/firebase'
 import { fetchPlan, fetchPlanList, removePlan } from '../lib/storage'
 import type { State, Plan } from '../types'
 import { TimeRange } from '../constants'
@@ -46,7 +46,7 @@ const mergeProps = (state, { dispatch }, ownProps): Props => ({
   onDestroy: () => {
     if (!window.confirm('Are you sure to delete this plan?')) return
 
-    if (state.plan.cloudId) deletePlan(state.plan)
+    // if (state.plan.cloudId) deletePlan(state.plan)
 
     removePlan(state.activePlanId).finally(() => {
       const nextPlan = state.planList.filter(
