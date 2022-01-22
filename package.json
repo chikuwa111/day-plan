@@ -9,7 +9,7 @@
     "firebase": "^5.3.1",
     "localforage": "^1.7.2",
     "lodash": "^4.17.10",
-    "nanoid": "^1.0.7",
+    "nanoid": "^3.1.31",
     "react": "^16.4.1",
     "react-dnd": "^5.0.0",
     "react-dnd-html5-backend": "^5.0.1",
